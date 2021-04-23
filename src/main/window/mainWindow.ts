@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 
-const createMainWindow = async () => {
+const createMainWindow = async (): Promise<void> => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
