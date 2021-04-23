@@ -17,8 +17,8 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
       - name: Install dependencies
-        run: yarn
+        run: npm install
       - name: Build electron app
-        run: yarn electron:build
+        run: npm run electron:build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
