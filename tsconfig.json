@@ -14,7 +14,8 @@
     "types": ["webpack-env"],
     "paths": {
       "@main/*": ["src/main/*"],
-      "@render/*": ["src/render/*"]
+      "@render/*": ["src/render/*"],
+      "@common/*": ["src/common/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
