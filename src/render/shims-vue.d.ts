@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { InjectedIpcRenderer } from '@common/event/injectedIpcRenderer'
+import { InjectedRequest } from '@common/network/injectedRequest'
 
 declare global {
   declare module '*.vue' {
@@ -14,4 +15,5 @@ declare global {
   }
 
   declare const ipcRenderer: InjectedIpcRenderer
+  declare const request: InjectedRequest
 }

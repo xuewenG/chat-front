@@ -1,4 +1,4 @@
-import { isTest } from '@main/util/env'
+import { isDevelopment, isTest } from '@main/util/env'
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import path from 'path'
 
@@ -14,6 +14,7 @@ const createWindow = (
     resizable: false,
     show: false,
     webPreferences: {
+      webSecurity: !isDevelopment,
       preload: path.resolve(__dirname, './preload.js'),
     },
   }
