@@ -1,18 +1,15 @@
-'use strict'
-
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { installDevTool } from './util/devtool'
+import { isDarwin, isDevelopment, isTest, isWin32 } from './util/env'
 import { createMainWindow } from './window/mainWindow'
-
-const isDevelopment = process.env.NODE_ENV !== 'production'
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ])
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (!isDarwin) {
     app.quit()
   }
 })
@@ -24,7 +21,7 @@ app.on('activate', () => {
 })
 
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
+  if (isDevelopment && !isTest) {
     installDevTool()
   }
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
@@ -34,7 +31,7 @@ app.on('ready', async () => {
 })
 
 if (isDevelopment) {
-  if (process.platform === 'win32') {
+  if (isWin32) {
     process.on('message', data => {
       if (data === 'graceful-exit') {
         app.quit()

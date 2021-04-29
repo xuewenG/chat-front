@@ -1,3 +1,4 @@
+import { isTest } from '@main/util/env'
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron'
 import path from 'path'
 
@@ -29,7 +30,7 @@ const createWindow = (
     win.loadURL(
       (process.env.WEBPACK_DEV_SERVER_URL as string) + `#${renderPath}`,
     )
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    if (!isTest) win.webContents.openDevTools()
   } else {
     win.loadURL('app://./index.html' + `#${renderPath}`)
   }
