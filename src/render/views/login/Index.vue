@@ -24,22 +24,23 @@
       <img class="avatar" src="https://source.unsplash.com/random" alt="头像" />
     </div>
     <div class="bottom-container">
-      <input class="info-input" id="account" type="text" />
-      <input class="info-input" id="password" type="password" />
-      <div class="select-container">
-        <div class="select-item">
+      <input class="input-text" id="account" type="text" />
+      <input class="input-text" id="password" type="password" />
+      <div class="option-container">
+        <div class="option-item">
           <input id="auto-login" type="checkbox" />
-          <label class="info-label" for="auto-login">自动登录</label>
+          <label for="auto-login">自动登录</label>
         </div>
-        <div class="select-item">
+        <div class="option-item">
           <input id="remember-password" type="checkbox" />
-          <label class="info-label" for="remember-password">记住密码</label>
+          <label for="remember-password">记住密码</label>
         </div>
-        <div class="select-item">
+        <div class="option-item">
           <div>找回密码</div>
         </div>
       </div>
       <button class="login">登录</button>
+      <div class="register" @click="handleOpenRegister">注册账号</div>
     </div>
   </div>
 </template>
@@ -51,15 +52,20 @@ import {
   useHideWindow,
   useMoveWindow,
 } from '@render/event/window'
+import { EVENT_TYPE } from '@common/event/eventType'
 
 export default defineComponent({
   name: 'Home',
   components: {},
   setup() {
+    const handleOpenRegister = () => {
+      ipcRenderer.send(EVENT_TYPE.OPEN_REGISTER_WINDOW)
+    }
     return {
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
+      handleOpenRegister,
     }
   },
 })
@@ -95,7 +101,7 @@ export default defineComponent({
     width: 100vw;
     height: 40vh;
     position: relative;
-    background: green;
+    background: pink;
     display: flex;
     justify-content: center;
     .avatar {
@@ -114,7 +120,7 @@ export default defineComponent({
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    .info-input {
+    .input-text {
       width: 100%;
       height: 28px;
       box-sizing: border-box;
@@ -147,13 +153,13 @@ export default defineComponent({
         background-image: url('../../assets/lock-focus.svg');
       }
     }
-    .select-container {
+    .option-container {
       width: 100%;
       margin-bottom: 16px;
       color: gray;
       display: flex;
       justify-content: space-between;
-      .select-item {
+      .option-item {
         font-size: 12px;
         display: flex;
       }
@@ -173,6 +179,15 @@ export default defineComponent({
       &:hover {
         background: rgba(31, 199, 253, 1);
       }
+    }
+    .register {
+      margin: 0 0 10px 10px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      color: gray;
+      font-size: 12px;
+      cursor: pointer;
     }
   }
 }

@@ -1,7 +1,7 @@
 'use strict'
 
 import { app, protocol, BrowserWindow } from 'electron'
-
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { installDevTool } from './util/devtool'
 import { createMainWindow } from './window/mainWindow'
 
@@ -26,6 +26,9 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     installDevTool()
+  }
+  if (!process.env.WEBPACK_DEV_SERVER_URL) {
+    createProtocol('app')
   }
   createMainWindow()
 })

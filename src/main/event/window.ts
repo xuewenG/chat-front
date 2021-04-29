@@ -1,7 +1,7 @@
 import { EVENT_TYPE } from '@common/event/eventType'
-import { screen, ipcMain, BrowserWindow } from 'electron'
+import { ipcMain, screen, BrowserWindow } from 'electron'
 
-const closeWindow = () => {
+const useCloseWindow = () => {
   ipcMain.on(EVENT_TYPE.CLOSE_WINDOW, event => {
     const contents = event.sender
     const win = BrowserWindow.fromWebContents(contents)
@@ -15,7 +15,7 @@ const closeWindow = () => {
   })
 }
 
-const hideWindow = () => {
+const useHideWindow = () => {
   ipcMain.on(EVENT_TYPE.HIDE_WINDOW, event => {
     const contents = event.sender
     const win = BrowserWindow.fromWebContents(contents)
@@ -26,7 +26,7 @@ const hideWindow = () => {
   })
 }
 
-const moveWindow = (): void => {
+const useMoveWindow = (): void => {
   let winStartPosition = { x: 0, y: 0 }
   let mouseStartPosition = { x: 0, y: 0 }
   let movingInterval: NodeJS.Timeout | null = null
@@ -59,4 +59,4 @@ const moveWindow = (): void => {
   })
 }
 
-export { closeWindow, hideWindow, moveWindow }
+export { useCloseWindow, useHideWindow, useMoveWindow }

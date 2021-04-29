@@ -1,37 +1,22 @@
-import { closeWindow, hideWindow, moveWindow } from '@main/event/window'
-import { BrowserWindow } from 'electron'
-import path from 'path'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { WINDOW_NAME } from '@common/window/windowName'
+import { useOpenRegisterWindow } from '@main/event/mainWindow'
+import {
+  useCloseWindow,
+  useHideWindow,
+  useMoveWindow,
+} from '@main/event/window'
+import { createWindow } from '.'
 
 const createMainWindow = async (): Promise<void> => {
-  const win = new BrowserWindow({
+  const win = createWindow(WINDOW_NAME.LOGIN_WINDOW, '/', {
     width: 430,
     height: 330,
-    frame: false,
-    resizable: false,
-    show: false,
-    webPreferences: {
-      nodeIntegration: (process.env
-        .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-      preload: path.resolve(__dirname, './preload.js'),
-    },
   })
-
-  closeWindow()
-  hideWindow()
-  moveWindow()
+  useCloseWindow()
+  useHideWindow()
+  useMoveWindow()
+  useOpenRegisterWindow()
   win.setAlwaysOnTop(true)
-
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
-  } else {
-    createProtocol('app')
-    win.loadURL('app://./index.html')
-  }
-  win.once('ready-to-show', () => {
-    win.show()
-  })
 }
 
 export { createMainWindow }
