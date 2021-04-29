@@ -1,6 +1,14 @@
 import { EVENT_TYPE } from '@common/event/eventType'
 
-const handleMouseDown = (e: MouseEvent) => {
+const handleCloseWindow = () => {
+  ipcRenderer.send(EVENT_TYPE.CLOSE_WINDOW)
+}
+
+const handleHideWindow = () => {
+  ipcRenderer.send(EVENT_TYPE.HIDE_WINDOW)
+}
+
+const handleStartMoveWindow = (e: MouseEvent) => {
   const elementTypes = [
     HTMLInputElement,
     HTMLButtonElement,
@@ -18,13 +26,26 @@ const handleMouseDown = (e: MouseEvent) => {
     canMove: true,
   })
 }
-const handleMouseUp = () => {
+const handleStopMoveWindow = () => {
   ipcRenderer.send(EVENT_TYPE.MOVE_WINDOW, {
     canMove: false,
   })
 }
-const useMoveWindow = () => {
-  return { handleMouseDown, handleMouseUp }
+
+const useCloseWindow = () => {
+  return {
+    handleCloseWindow,
+  }
 }
 
-export { useMoveWindow }
+const useHideWindow = () => {
+  return {
+    handleHideWindow,
+  }
+}
+
+const useMoveWindow = () => {
+  return { handleStartMoveWindow, handleStopMoveWindow }
+}
+
+export { useCloseWindow, useHideWindow, useMoveWindow }

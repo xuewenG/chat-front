@@ -1,4 +1,4 @@
-import { moveWindow } from '@main/event/moveWindow'
+import { closeWindow, hideWindow, moveWindow } from '@main/event/window'
 import { BrowserWindow } from 'electron'
 import path from 'path'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
@@ -9,6 +9,7 @@ const createMainWindow = async (): Promise<void> => {
     height: 330,
     frame: false,
     resizable: false,
+    show: false,
     webPreferences: {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
@@ -16,7 +17,9 @@ const createMainWindow = async (): Promise<void> => {
     },
   })
 
-  moveWindow(win)
+  closeWindow()
+  hideWindow()
+  moveWindow()
   win.setAlwaysOnTop(true)
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -26,6 +29,9 @@ const createMainWindow = async (): Promise<void> => {
     createProtocol('app')
     win.loadURL('app://./index.html')
   }
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 }
 
 export { createMainWindow }

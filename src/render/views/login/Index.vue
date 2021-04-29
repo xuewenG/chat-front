@@ -3,12 +3,22 @@
     class="container"
     @dragstart.prevent
     @dragend.prevent
-    @mousedown="handleMouseDown"
-    @mouseup="handleMouseUp"
+    @mousedown="handleStartMoveWindow"
+    @mouseup="handleStopMoveWindow"
   >
     <div class="op-bar">
-      <img class="op-item mini" src="../../assets/mini.svg" alt="最小化" />
-      <img class="op-item close" src="../../assets/close.svg" alt="关闭" />
+      <img
+        class="op-item mini"
+        src="../../assets/mini.svg"
+        alt="最小化"
+        @click="handleHideWindow"
+      />
+      <img
+        class="op-item close"
+        src="../../assets/close.svg"
+        alt="关闭"
+        @click="handleCloseWindow"
+      />
     </div>
     <div class="top-container">
       <img class="avatar" src="https://source.unsplash.com/random" alt="头像" />
@@ -36,7 +46,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useMoveWindow } from '@render/event/moveWindow'
+import {
+  useCloseWindow,
+  useHideWindow,
+  useMoveWindow,
+} from '@render/event/window'
 
 export default defineComponent({
   name: 'Home',
@@ -44,6 +58,8 @@ export default defineComponent({
   setup() {
     return {
       ...useMoveWindow(),
+      ...useCloseWindow(),
+      ...useHideWindow(),
     }
   },
 })
