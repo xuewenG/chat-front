@@ -2,7 +2,7 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { installDevTool } from './util/devtool'
 import { isDarwin, isDevelopment, isTest, isWin32 } from './util/env'
-import { createMainWindow } from './window/mainWindow'
+import { createLoginWindow } from './window/loginWindow'
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
@@ -16,7 +16,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createMainWindow()
+    createLoginWindow()
   }
 })
 
@@ -27,7 +27,7 @@ app.on('ready', async () => {
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
     createProtocol('app')
   }
-  createMainWindow()
+  createLoginWindow()
 })
 
 if (isDevelopment) {

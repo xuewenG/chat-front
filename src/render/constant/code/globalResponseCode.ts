@@ -1,0 +1,6 @@
+const GLOBAL_RESPONSE_CODE = {
+  SUCCESS: '2000',
+  FAILED: '4000',
+}
+
+export { GLOBAL_RESPONSE_CODE }

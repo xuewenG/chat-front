@@ -5,7 +5,7 @@ const createRegisterWindow = () => {
   const loginWindow = getWindowByName(WINDOW_NAME.LOGIN_WINDOW)
   createWindow(WINDOW_NAME.REISTER_WINDOW, '/register', {
     width: 500,
-    height: 390,
+    height: 398,
     parent: loginWindow,
   })
 }

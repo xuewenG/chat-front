@@ -22,33 +22,55 @@
     </div>
     <div class="top-container">欢迎注册 Chat</div>
     <div class="bottom-container">
-      <input class="input-text" id="nickname" placeholder="昵称" type="text" />
-      <input
-        class="input-text"
+      <m-input
+        class="input-comp"
+        id="nickname"
+        place-holder="昵称"
+        type="text"
+        v-model="nickname"
+        :changeHandler="handleNicknameChange"
+        :validInput="validMap.nickname.value"
+      />
+      <m-input
+        class="input-comp"
         id="email"
-        placeholder="电子邮箱"
+        place-holder="电子邮箱"
         type="email"
+        v-model="email"
+        :changeHandler="handleEmailChange"
+        :validInput="validMap.email.value"
       />
-      <input
-        class="input-text"
+      <m-input
+        class="input-comp"
         id="password"
-        placeholder="密码"
+        place-holder="密码"
         type="password"
+        v-model="password"
+        :changeHandler="handlePasswordChange"
+        :validInput="validMap.password.value"
       />
-      <input
-        class="input-text"
+      <m-input
+        class="input-comp"
         id="password-confirmed"
-        placeholder="确认密码"
+        place-holder="确认密码"
         type="password"
+        v-model="passwordConfirmed"
+        :changeHandler="handlePasswordChange"
+        :validInput="validMap.passwordConfirmed.value"
       />
       <div class="verify-code-container">
-        <input
-          class="input-text"
+        <m-input
+          class="input-comp"
           id="verify-code"
-          placeholder="验证码"
+          place-holder="验证码"
           type="text"
+          v-model="verifyCode"
+          :inputHandler="handleVerifyCodeInput"
+          :validInput="validMap.verifyCode.value"
         />
-        <div class="get-verify-code">获取验证码</div>
+        <div class="get-verify-code" @click="handleGetVerifyCode">
+          {{ getVerifyCodeCount || '获取验证码' }}
+        </div>
       </div>
       <button class="register" @click="handleRegister">立即注册</button>
     </div>
@@ -62,19 +84,20 @@ import {
   useHideWindow,
   useMoveWindow,
 } from '@render/event/window'
+import mInput from '@render/components/mInput.vue'
+import { useRegister } from './useRegister'
 
 export default defineComponent({
   name: 'Home',
-  components: {},
+  components: {
+    mInput,
+  },
   setup() {
-    const handleRegister = () => {
-      console.log('register')
-    }
     return {
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
-      handleRegister,
+      ...useRegister(),
     }
   },
 })
@@ -83,6 +106,7 @@ export default defineComponent({
 <style lang="less" scoped>
 .container {
   width: 100vw;
+  height: 100vh;
   user-select: none;
   .op-bar {
     position: fixed;
@@ -96,6 +120,7 @@ export default defineComponent({
       transition: 0.2s;
     }
     .mini {
+      display: none;
       &:hover {
         background: rgba(255, 255, 255, 0.25);
       }
@@ -125,29 +150,16 @@ export default defineComponent({
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .input-text {
+    .input-comp {
       width: 300px;
-      height: 30px;
-      margin-bottom: 12px;
-      border: none;
-      outline: none;
-      border-bottom: 1px solid rgba(229, 229, 229, 1);
-      &:first-child {
-        margin-top: 18px;
-      }
-      &:hover {
-        border-bottom: 1px solid rgba(193, 193, 193, 1);
-      }
-      &:focus {
-        border-bottom: 1px solid rgba(18, 183, 245, 1);
-      }
+      height: 38px;
     }
     .verify-code-container {
       width: 300px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .input-text {
+      .input-comp {
         width: 200px;
         margin-top: 0;
       }

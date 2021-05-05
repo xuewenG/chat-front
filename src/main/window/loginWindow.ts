@@ -1,5 +1,6 @@
 import { WINDOW_NAME } from '@common/window/windowName'
-import { useOpenRegisterWindow } from '@main/event/mainWindow'
+import { useCopy } from '@main/event/copy'
+import { useOpenRegisterWindow } from '@main/event/loginWindow'
 import {
   useCloseWindow,
   useHideWindow,
@@ -7,7 +8,7 @@ import {
 } from '@main/event/window'
 import { createWindow } from '.'
 
-const createMainWindow = async (): Promise<void> => {
+const createLoginWindow = async (): Promise<void> => {
   const win = createWindow(WINDOW_NAME.LOGIN_WINDOW, '/', {
     width: 430,
     height: 330,
@@ -16,7 +17,8 @@ const createMainWindow = async (): Promise<void> => {
   useHideWindow()
   useMoveWindow()
   useOpenRegisterWindow()
+  useCopy()
   win.setAlwaysOnTop(true)
 }
 
-export { createMainWindow }
+export { createLoginWindow }
