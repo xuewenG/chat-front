@@ -13,6 +13,7 @@ module.exports = {
   globals: {
     ipcRenderer: true,
     request: true,
+    desktopCapturer: true,
   },
   parserOptions: {
     ecmaVersion: 2020,

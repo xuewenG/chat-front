@@ -3,7 +3,7 @@ import { InjectedIpcRenderer } from '@common/event/injectedIpcRenderer'
 import { API_HOST } from '@common/network'
 import { InjectedRequest } from '@common/network/injectedRequest'
 import { isDevelopment } from '@main/util/env'
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, desktopCapturer, ipcRenderer } from 'electron'
 import nodeFetch from 'node-fetch'
 
 const injectIpcRenderer = () => {
@@ -59,5 +59,10 @@ const injectRequest = () => {
   contextBridge.exposeInMainWorld('request', injectedRequest)
 }
 
+const injectDesktopCapturer = () => {
+  contextBridge.exposeInMainWorld('desktopCapturer', desktopCapturer)
+}
+
 injectIpcRenderer()
 injectRequest()
+injectDesktopCapturer()
