@@ -67,8 +67,9 @@ import MessageFlow from '@render/components/messageFlow.vue'
 import FriendFlow from '@render/components/friendFlow.vue'
 import Search from '@render/components/search.vue'
 import { computed, defineComponent } from 'vue'
-import { useStore } from '@render/store'
+import { FriendMessage, useStore } from '@render/store'
 import { EVENT_TYPE } from '@common/event/eventType'
+import { User } from '@render/entity/user'
 
 export default defineComponent({
   name: 'Home',
@@ -79,7 +80,7 @@ export default defineComponent({
     Search,
   },
   setup() {
-    const friendListFromServer = [
+    const friendListFromServer: User[] = [
       {
         id: 10,
         nickname: '小明',
@@ -108,16 +109,79 @@ export default defineComponent({
         email: 'xiaoli3@xuewen.me',
       },
     ]
+    const friendMessageListFromServer: FriendMessage[] = [
+      {
+        friendId: 10,
+        messageList: [
+          {
+            fromId: 10,
+            toId: 1,
+            content: '你出门了吗？',
+            time: new Date('2021-05-05 18:01:32'),
+          },
+          {
+            fromId: 1,
+            toId: 10,
+            content: '快到了',
+            time: new Date('2021-05-05 18:09:20'),
+          },
+        ],
+      },
+      {
+        friendId: 11,
+        messageList: [
+          {
+            fromId: 1,
+            toId: 11,
+            content: '在干嘛？',
+            time: new Date('2021-05-05 11:50:15'),
+          },
+          {
+            fromId: 11,
+            toId: 1,
+            content: '看电视',
+            time: new Date('2021-05-05 11:55:27'),
+          },
+          {
+            fromId: 1,
+            toId: 11,
+            content: '吃饭了吗？',
+            time: new Date('2021-05-05 11:55:58'),
+          },
+        ],
+      },
+      {
+        friendId: 12,
+        messageList: [
+          {
+            fromId: 1,
+            toId: 12,
+            content: '你啥时候回来？',
+            time: new Date('2021-05-05 09:20:05'),
+          },
+          {
+            fromId: 12,
+            toId: 1,
+            content: '下午吧',
+            time: new Date('2021-05-05 09:29:19'),
+          },
+        ],
+      },
+    ]
     const store = useStore()
+    store.dispatch('SET_FRIEND_LIST', friendListFromServer)
+    store.dispatch('SET_FRIEND_MESSAGE_LIST', friendMessageListFromServer)
     if (friendListFromServer.length) {
       const currentChatId = friendListFromServer[0].id
       store.dispatch('SET_CURRENT_CHAT_ID', currentChatId)
     }
-    store.dispatch('SET_FRIEND_LIST', friendListFromServer)
+
     const friendList = computed(() => store.state.friendList)
     const currentChatId = computed(() => store.state.currentChatId)
-    const currentChatFriend = computed(() =>
-      friendList.value.find(current => current.id === currentChatId.value),
+    const currentChatFriend = computed(
+      () =>
+        friendList.value.find(current => current.id === currentChatId.value) ||
+        ({} as User),
     )
     const handleScreenShare = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)

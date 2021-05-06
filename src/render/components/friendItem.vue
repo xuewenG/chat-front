@@ -6,19 +6,21 @@
     <div class="right-container">
       <div class="top-container">
         <div class="nickname">{{ friend.nickname }}</div>
-        <div class="time">11:35</div>
+        <div class="time">{{ timeStr }}</div>
       </div>
       <div class="bottom-container">
-        <div class="last-message">{{ lastMessage }}</div>
+        <div class="last-message">{{ messageContent }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { Message } from '@render/entity/message'
 import { User } from '@render/entity/user'
 import { useStore } from '@render/store'
-import { defineComponent, PropType, ref, toRefs } from 'vue'
+import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
+import moment from 'moment'
 export default defineComponent({
   name: 'FriendItem',
   props: {
@@ -34,13 +36,30 @@ export default defineComponent({
   setup(props) {
     const { friend } = toRefs(props)
     const store = useStore()
-    const lastMessage = ref('在看电视')
+    const currentMessageList = computed(
+      () =>
+        store.state.friendMessageList.find(
+          friendMessage => friendMessage.friendId === friend.value.id,
+        )?.messageList || [],
+    )
+    const lastMessage = computed(
+      () =>
+        currentMessageList.value[currentMessageList.value.length - 1] ||
+        ({} as Message),
+    )
+    const messageContent = computed(() => lastMessage.value.content)
+    const timeStr = computed(() =>
+      lastMessage.value.time
+        ? moment(lastMessage.value.time).format('HH:mm')
+        : '',
+    )
     const changeChat = () => {
       store.dispatch('SET_CURRENT_CHAT_ID', friend.value.id)
     }
     return {
+      messageContent,
+      timeStr,
       changeChat,
-      lastMessage,
     }
   },
 })

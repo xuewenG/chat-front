@@ -10,37 +10,23 @@
 
 <script lang="ts">
 import { Message } from '@render/entity/message'
-import { computed, defineComponent, reactive } from 'vue'
+import { useStore } from '@render/store'
+import { computed, defineComponent } from 'vue'
 import MessageItem from './messageItem.vue'
 export default defineComponent({
   name: 'MessageFlow',
   components: { MessageItem },
   setup() {
-    const currentMessageList: Message[] = reactive([
-      {
-        id: 1,
-        fromId: 1,
-        toId: -1,
-        content: '在干嘛？',
-        time: new Date(),
-      },
-      {
-        id: 2,
-        fromId: -1,
-        toId: -1,
-        content: '看电视',
-        time: new Date(),
-      },
-      {
-        id: 3,
-        fromId: 1,
-        toId: -1,
-        content: '吃饭了吗？',
-        time: new Date(),
-      },
-    ])
+    const store = useStore()
+    const currentChatId = computed(() => store.state.currentChatId)
+    const currentMessageList = computed(
+      () =>
+        store.state.friendMessageList.find(
+          friendMessage => friendMessage.friendId === currentChatId.value,
+        )?.messageList || [],
+    )
     const computedCurrentMessageList = computed(() => {
-      return currentMessageList.map((message, index, list) => {
+      return currentMessageList.value.map((message, index, list) => {
         const newMessage: Partial<Message> = Object.assign({}, message)
         if (index === 0) {
           return newMessage

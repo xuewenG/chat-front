@@ -1,11 +1,17 @@
+import { Message } from '@render/entity/message'
 import { User } from '@render/entity/user'
 import { InjectionKey } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
-interface LastLogin {
+export interface LastLogin {
   credential: string
   password: string
+}
+
+export interface FriendMessage {
+  friendId: number
+  messageList: Message[]
 }
 
 export interface State {
@@ -13,6 +19,7 @@ export interface State {
   currentUser: User
   lastLogin: LastLogin
   friendList: User[]
+  friendMessageList: FriendMessage[]
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -33,6 +40,7 @@ export default createStore<State>({
       password: '',
     },
     friendList: [],
+    friendMessageList: [],
   },
   mutations: {
     SET_CURRENT_CHAT_ID(state, currentChatId: number) {
@@ -47,6 +55,9 @@ export default createStore<State>({
     SET_FRIEND_LIST(state, friendList: User[]) {
       state.friendList = friendList
     },
+    SET_FRIEND_MESSAGE_LIST(state, friendMessageList: FriendMessage[]) {
+      state.friendMessageList = friendMessageList
+    },
   },
   actions: {
     SET_CURRENT_CHAT_ID(state, currentChatId: number) {
@@ -60,6 +71,9 @@ export default createStore<State>({
     },
     SET_FRIEND_LIST(state, friendList: User[]) {
       state.commit('SET_FRIEND_LIST', friendList)
+    },
+    SET_FRIEND_MESSAGE_LIST(state, friendMessageList: FriendMessage[]) {
+      state.commit('SET_FRIEND_MESSAGE_LIST', friendMessageList)
     },
   },
   plugins: [createPersistedState()],

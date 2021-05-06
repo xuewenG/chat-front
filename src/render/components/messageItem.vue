@@ -20,6 +20,7 @@ import { computed, defineComponent, PropType, toRefs } from 'vue'
 import moment from 'moment'
 import { useStore } from '@render/store'
 import { Message } from '@render/entity/message'
+import { User } from '@render/entity/user'
 
 export default defineComponent({
   name: 'MessageItem',
@@ -51,8 +52,10 @@ export default defineComponent({
     )
     const friendList = computed(() => store.state.friendList)
     const currentChatId = computed(() => store.state.currentChatId)
-    const currentChatFriend = computed(() =>
-      friendList.value.find(current => current.id === currentChatId.value),
+    const currentChatFriend = computed(
+      () =>
+        friendList.value.find(current => current.id === currentChatId.value) ||
+        ({} as User),
     )
     return {
       currentChatFriend,
