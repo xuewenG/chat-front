@@ -2,4 +2,8 @@
   <router-view />
 </template>
 
-<style lang="less"></style>
+<style lang="less">
+body {
+  user-select: none;
+}
+</style>
