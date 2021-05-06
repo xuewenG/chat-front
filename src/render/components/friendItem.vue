@@ -16,9 +16,8 @@
 </template>
 
 <script lang="ts">
-import { Message } from '@render/entity/message'
 import { User } from '@render/entity/user'
-import { useStore } from '@render/store'
+import { FriendMessage, useStore } from '@render/store'
 import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
 import moment from 'moment'
 export default defineComponent({
@@ -36,17 +35,24 @@ export default defineComponent({
   setup(props) {
     const { friend } = toRefs(props)
     const store = useStore()
-    const currentMessageList = computed(
-      () =>
-        store.state.friendMessageList.find(
-          friendMessage => friendMessage.friendId === friend.value.id,
-        )?.messageList || [],
-    )
-    const lastMessage = computed(
-      () =>
-        currentMessageList.value[currentMessageList.value.length - 1] ||
-        ({} as Message),
-    )
+    const currentMessageList = computed(() => {
+      const friendMessage:
+        | FriendMessage
+        | undefined = store.state.friendMessageList.find(
+        friendMessage => friendMessage.friendId === friend.value.id,
+      )
+      if (!friendMessage) {
+        return []
+      }
+      return friendMessage.messageList || []
+    })
+    const lastMessage = computed(() => {
+      const length = currentMessageList.value.length
+      if (!length) {
+        return { content: '', time: new Date() }
+      }
+      return currentMessageList.value[length - 1]
+    })
     const messageContent = computed(() => lastMessage.value.content)
     const timeStr = computed(() =>
       lastMessage.value.time

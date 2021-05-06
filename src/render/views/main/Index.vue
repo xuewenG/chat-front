@@ -181,7 +181,7 @@ export default defineComponent({
     const currentChatFriend = computed(
       () =>
         friendList.value.find(current => current.id === currentChatId.value) ||
-        ({} as User),
+        {},
     )
     const handleScreenShare = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)

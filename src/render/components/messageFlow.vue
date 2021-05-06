@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Message } from '@render/entity/message'
-import { useStore } from '@render/store'
+import { FriendMessage, useStore } from '@render/store'
 import { computed, defineComponent } from 'vue'
 import MessageItem from './messageItem.vue'
 export default defineComponent({
@@ -19,12 +19,17 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const currentChatId = computed(() => store.state.currentChatId)
-    const currentMessageList = computed(
-      () =>
-        store.state.friendMessageList.find(
-          friendMessage => friendMessage.friendId === currentChatId.value,
-        )?.messageList || [],
-    )
+    const currentMessageList = computed(() => {
+      const friendMessage:
+        | FriendMessage
+        | undefined = store.state.friendMessageList.find(
+        friendMessage => friendMessage.friendId === currentChatId.value,
+      )
+      if (!friendMessage) {
+        return []
+      }
+      return friendMessage.messageList || []
+    })
     const computedCurrentMessageList = computed(() => {
       return currentMessageList.value.map((message, index, list) => {
         const newMessage: Partial<Message> = Object.assign({}, message)
