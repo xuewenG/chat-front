@@ -5,13 +5,9 @@
         {{ timeStr }}
       </div>
     </div>
-    <div class="message-container" :class="{ self: myMessage }">
+    <div class="message-container" :class="{ 'friend-message': !myMessage }">
       <img
-        :src="
-          myMessage
-            ? 'https://source.unsplash.com/random'
-            : 'https://source.unsplash.com/random'
-        "
+        :src="myMessage ? currentUser.avatar : currentChatFriend.avatar"
         class="avatar"
       />
       <div class="content">{{ message.content }}</div>
@@ -53,7 +49,13 @@ export default defineComponent({
         ? moment(message.value.time).format('YYYY-MM-DD HH:mm:ss')
         : '',
     )
+    const friendList = computed(() => store.state.friendList)
+    const currentChatId = computed(() => store.state.currentChatId)
+    const currentChatFriend = computed(() =>
+      friendList.value.find(current => current.id === currentChatId.value),
+    )
     return {
+      currentChatFriend,
       currentUser,
       timeStr,
       myMessage,
@@ -108,7 +110,7 @@ export default defineComponent({
         border-left-color: #fff;
       }
     }
-    &.self {
+    &.friend-message {
       flex-direction: row;
       .content {
         margin-right: 0;

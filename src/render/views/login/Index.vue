@@ -21,7 +21,11 @@
       />
     </div>
     <div class="top-container">
-      <img class="avatar" src="https://source.unsplash.com/random" alt="头像" />
+      <img
+        class="avatar"
+        :src="avatar || 'https://source.unsplash.com/random'"
+        alt="头像"
+      />
     </div>
     <div class="bottom-container">
       <m-input
@@ -60,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import {
   useCloseWindow,
   useHideWindow,
@@ -78,10 +82,12 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const avatar = computed(() => store.state.currentUser.avatar)
     const handleOpenRegister = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_REGISTER_WINDOW)
     }
     return {
+      avatar,
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),

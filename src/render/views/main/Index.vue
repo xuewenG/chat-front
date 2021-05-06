@@ -82,24 +82,27 @@ export default defineComponent({
     const friendListFromServer = [
       {
         id: 10,
-        nickname: '小丽1',
-        avatar: 'https://source.unsplash.com/random',
+        nickname: '小明',
+        avatar:
+          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar1.jpeg',
         account: '1982581',
         password: '',
         email: 'xiaoli1@xuewen.me',
       },
       {
         id: 11,
-        nickname: '小丽2',
-        avatar: 'https://source.unsplash.com/random',
+        nickname: '李华',
+        avatar:
+          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar11.jpeg',
         account: '1982582',
         password: '',
         email: 'xiaoli2@xuewen.me',
       },
       {
         id: 12,
-        nickname: '小丽3',
-        avatar: 'https://source.unsplash.com/random',
+        nickname: '小红',
+        avatar:
+          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar3.jpeg',
         account: '1982583',
         password: '',
         email: 'xiaoli3@xuewen.me',
