@@ -6,7 +6,7 @@ import { createRegisterWindow } from '@main/window/registerWindow'
 import { ipcMain } from 'electron'
 
 const useOpenRegisterWindow = () => {
-  ipcMain.on(EVENT_TYPE.OPEN_REGISTER_WINDOW, event => {
+  ipcMain.on(EVENT_TYPE.OPEN_REGISTER_WINDOW, () => {
     const win = getWindowByName(WINDOW_NAME.REISTER_WINDOW)
     if (win) {
       win.focus()
