@@ -48,7 +48,6 @@ export default defineComponent({
     const myMessage = computed(
       () => message.value.fromId === currentUser.value.id,
     )
-    console.log('time', message.value.time)
     const timeStr = computed(() =>
       message.value.time
         ? moment(message.value.time).format('YYYY-MM-DD HH:mm:ss')

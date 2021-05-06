@@ -10,46 +10,32 @@
 
 <script lang="ts">
 import { Message } from '@render/entity/message'
-// import { User } from '@render/entity/user'
-// import { useStore } from '@render/store'
 import { computed, defineComponent, reactive } from 'vue'
 import MessageItem from './messageItem.vue'
 export default defineComponent({
   name: 'MessageFlow',
   components: { MessageItem },
   setup() {
-    console.log('setup')
-    // const store = useStore()
-    // const currentChatId = computed(() => store.state.currentChatId)
-    // const currentChatFriend = computed(() => {
-    //   const friendList = store.state.friendList
-    //   for (const user of friendList) {
-    //     if (user.id === currentChatId.value) {
-    //       return user
-    //     }
-    //   }
-    //   return {} as User
-    // })
     const currentMessageList: Message[] = reactive([
       {
         id: 1,
         fromId: 1,
         toId: -1,
-        content: 'default content1',
+        content: '在干嘛？',
         time: new Date(),
       },
       {
         id: 2,
         fromId: -1,
         toId: -1,
-        content: 'default content2',
+        content: '看电视',
         time: new Date(),
       },
       {
         id: 3,
         fromId: 1,
         toId: -1,
-        content: 'default content3',
+        content: '吃饭了吗？',
         time: new Date(),
       },
     ])
@@ -64,7 +50,6 @@ export default defineComponent({
           message.time.getTime() - preMessage.time.getTime() <
           5 * 60 * 1000
         ) {
-          console.log(message.time.getTime() - preMessage.time.getTime())
           newMessage.time = undefined
         }
         return newMessage

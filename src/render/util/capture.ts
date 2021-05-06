@@ -1,7 +1,7 @@
 const setStreamToVideo = (selector: string, stream: MediaStream) => {
   const video: HTMLVideoElement | null = document.querySelector(selector)
   if (!video) {
-    console.log('no video dom!')
+    console.error('no video dom!')
     return
   }
   video.srcObject = stream

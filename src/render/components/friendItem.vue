@@ -34,7 +34,7 @@ export default defineComponent({
   setup(props) {
     const { friend } = toRefs(props)
     const store = useStore()
-    const lastMessage = ref('你写了多少行代码？')
+    const lastMessage = ref('在看电视')
     const changeChat = () => {
       store.dispatch('SET_CURRENT_CHAT_ID', friend.value.id)
     }

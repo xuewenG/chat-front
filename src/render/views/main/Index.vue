@@ -47,6 +47,7 @@
             class="tool-item voice"
             src="../../assets/screen.svg"
             alt="桌面共享"
+            @click="handleScreenShare"
           />
         </div>
         <message-editor />
@@ -67,6 +68,7 @@ import FriendFlow from '@render/components/friendFlow.vue'
 import Search from '@render/components/search.vue'
 import { computed, defineComponent } from 'vue'
 import { useStore } from '@render/store'
+import { EVENT_TYPE } from '@common/event/eventType'
 
 export default defineComponent({
   name: 'Home',
@@ -114,8 +116,12 @@ export default defineComponent({
     const currentChatFriend = computed(() =>
       friendList.value.find(current => current.id === currentChatId.value),
     )
+    const handleScreenShare = () => {
+      ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)
+    }
     return {
       currentChatFriend,
+      handleScreenShare,
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),

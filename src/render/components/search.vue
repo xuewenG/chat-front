@@ -11,7 +11,7 @@ export default defineComponent({
   name: 'Search',
   components: {},
   setup() {
-    console.log('setup')
+    console.log('search - setup')
   },
 })
 </script>
