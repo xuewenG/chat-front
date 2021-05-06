@@ -1,6 +1,7 @@
 import { EVENT_TYPE } from '@common/event/eventType'
 import { WINDOW_NAME } from '@common/window/windowName'
 import { getWindowByName } from '@main/window'
+import { createMainWindow } from '@main/window/mainWindow'
 import { createRegisterWindow } from '@main/window/registerWindow'
 import { ipcMain } from 'electron'
 
@@ -15,4 +16,10 @@ const useOpenRegisterWindow = () => {
   })
 }
 
-export { useOpenRegisterWindow }
+const useOpenMainWindow = () => {
+  ipcMain.on(EVENT_TYPE.OPEN_MAIN_WINDOW, () => {
+    createMainWindow()
+  })
+}
+
+export { useOpenRegisterWindow, useOpenMainWindow }

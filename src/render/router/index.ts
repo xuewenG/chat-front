@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Login from '@render/views/login/Index.vue'
 import Register from '@render/views/register/Index.vue'
 import RegisterSuccess from '@render/views/register/Success.vue'
+import Main from '@render/views/main/Index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/success',
     name: 'RegisterSuccess',
     component: RegisterSuccess,
+  },
+  {
+    path: '/main',
+    name: 'Main',
+    component: Main,
   },
 ]
 

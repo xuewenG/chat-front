@@ -1,6 +1,10 @@
 import { WINDOW_NAME } from '@common/window/windowName'
 import { useCopy } from '@main/event/copy'
-import { useOpenRegisterWindow } from '@main/event/loginWindow'
+import {
+  useOpenMainWindow,
+  useOpenRegisterWindow,
+} from '@main/event/loginWindow'
+import { useInitWebSocket } from '@main/event/socket'
 import {
   useCloseWindow,
   useHideWindow,
@@ -17,6 +21,8 @@ const createLoginWindow = async (): Promise<void> => {
   useHideWindow()
   useMoveWindow()
   useOpenRegisterWindow()
+  useOpenMainWindow()
+  useInitWebSocket()
   useCopy()
   win.setAlwaysOnTop(true)
 }

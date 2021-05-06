@@ -24,22 +24,36 @@
       <img class="avatar" src="https://source.unsplash.com/random" alt="头像" />
     </div>
     <div class="bottom-container">
-      <input class="input-text" id="account" type="text" />
-      <input class="input-text" id="password" type="password" />
+      <m-input
+        class="input-text"
+        id="account"
+        type="text"
+        v-model="credential"
+      />
+      <m-input
+        class="input-text"
+        id="password"
+        type="password"
+        v-model="password"
+      />
       <div class="option-container">
         <div class="option-item">
           <input id="auto-login" type="checkbox" />
           <label for="auto-login">自动登录</label>
         </div>
         <div class="option-item">
-          <input id="remember-password" type="checkbox" />
+          <input
+            id="remember-password"
+            type="checkbox"
+            v-model="rememberPassword"
+          />
           <label for="remember-password">记住密码</label>
         </div>
         <div class="option-item">
           <div>找回密码</div>
         </div>
       </div>
-      <button class="login">登录</button>
+      <button class="login" @click="handleLogin">登录</button>
       <div class="register" @click="handleOpenRegister">注册账号</div>
     </div>
   </div>
@@ -53,11 +67,17 @@ import {
   useMoveWindow,
 } from '@render/event/window'
 import { EVENT_TYPE } from '@common/event/eventType'
+import mInput from '@render/components/mInput.vue'
+import { useLogin } from './useLogin'
+import { useStore } from '@render/store'
 
 export default defineComponent({
   name: 'Home',
-  components: {},
+  components: {
+    mInput,
+  },
   setup() {
+    const store = useStore()
     const handleOpenRegister = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_REGISTER_WINDOW)
     }
@@ -65,6 +85,7 @@ export default defineComponent({
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
+      ...useLogin(store),
       handleOpenRegister,
     }
   },
@@ -126,20 +147,9 @@ export default defineComponent({
       box-sizing: border-box;
       padding: 0 20px;
       margin-bottom: 10px;
-      display: inline-block;
-      transition: 0.2s;
       background-size: 16px;
       background-repeat: no-repeat;
       background-position: 0 center;
-      border: none;
-      outline: none;
-      border-bottom: 1px solid rgba(229, 229, 229, 1);
-      &:hover {
-        border-bottom: 1px solid rgba(193, 193, 193, 1);
-      }
-      &:focus {
-        border-bottom: 1px solid rgba(18, 183, 245, 1);
-      }
     }
     #account {
       background-image: url('../../assets/account.svg');
