@@ -5,6 +5,7 @@ enum EVENT_TYPE {
   OPEN_REGISTER_WINDOW = 'OPEN_REGISTER_WINDOW',
   COPY_TEXT = 'COPY_TEXT',
   INIT_WEB_SOCKET = 'INIT_WEB_SOCKET',
+  SEND_SOCKET_MESSAGE = 'SEND_SOCKET_MESSAGE',
   OPEN_MAIN_WINDOW = 'OPEN_MAIN_WINDOW',
 }
 
@@ -20,6 +21,10 @@ interface EVENT_DATA {
   }
   [EVENT_TYPE.INIT_WEB_SOCKET]: {
     token: string
+  }
+  [EVENT_TYPE.SEND_SOCKET_MESSAGE]: {
+    type: number
+    data: string
   }
   [EVENT_TYPE.OPEN_MAIN_WINDOW]: Record<string, never>
 }

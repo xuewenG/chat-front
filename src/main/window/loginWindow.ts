@@ -4,7 +4,7 @@ import {
   useOpenMainWindow,
   useOpenRegisterWindow,
 } from '@main/event/loginWindow'
-import { useInitWebSocket } from '@main/event/socket'
+import { useInitWebSocket, useSendSocketMessage } from '@main/event/socket'
 import {
   useCloseWindow,
   useHideWindow,
@@ -23,6 +23,7 @@ const createLoginWindow = async (): Promise<void> => {
   useOpenRegisterWindow()
   useOpenMainWindow()
   useInitWebSocket()
+  useSendSocketMessage()
   useCopy()
   win.setAlwaysOnTop(true)
 }
