@@ -25,11 +25,30 @@
       <friend-flow />
     </div>
     <div class="right-container">
-      <div class="message-flow">
-        <div class="friend-info">小葛(7565952)</div>
+      <div class="top-container">
+        <div class="friend-info">
+          {{ currentChatFriend.nickname }}({{ currentChatFriend.account }})
+        </div>
         <message-flow />
       </div>
-      <div class="message-editor">
+      <div class="bottom-container">
+        <div class="tool-bar">
+          <img
+            class="tool-item voice"
+            src="../../assets/voice.svg"
+            alt="语音通话"
+          />
+          <img
+            class="tool-item voice"
+            src="../../assets/video.svg"
+            alt="视频通话"
+          />
+          <img
+            class="tool-item voice"
+            src="../../assets/screen.svg"
+            alt="桌面共享"
+          />
+        </div>
         <message-editor />
       </div>
     </div>
@@ -46,7 +65,8 @@ import MessageEditor from '@render/components/messageEditor.vue'
 import MessageFlow from '@render/components/messageFlow.vue'
 import FriendFlow from '@render/components/friendFlow.vue'
 import Search from '@render/components/search.vue'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useStore } from '@render/store'
 
 export default defineComponent({
   name: 'Home',
@@ -57,7 +77,45 @@ export default defineComponent({
     Search,
   },
   setup() {
+    const friendListFromServer = [
+      {
+        id: 10,
+        nickname: '小丽1',
+        avatar: 'https://source.unsplash.com/random',
+        account: '1982581',
+        password: '',
+        email: 'xiaoli1@xuewen.me',
+      },
+      {
+        id: 11,
+        nickname: '小丽2',
+        avatar: 'https://source.unsplash.com/random',
+        account: '1982582',
+        password: '',
+        email: 'xiaoli2@xuewen.me',
+      },
+      {
+        id: 12,
+        nickname: '小丽3',
+        avatar: 'https://source.unsplash.com/random',
+        account: '1982583',
+        password: '',
+        email: 'xiaoli3@xuewen.me',
+      },
+    ]
+    const store = useStore()
+    if (friendListFromServer.length) {
+      const currentChatId = friendListFromServer[0].id
+      store.dispatch('SET_CURRENT_CHAT_ID', currentChatId)
+    }
+    store.dispatch('SET_FRIEND_LIST', friendListFromServer)
+    const friendList = computed(() => store.state.friendList)
+    const currentChatId = computed(() => store.state.currentChatId)
+    const currentChatFriend = computed(() =>
+      friendList.value.find(current => current.id === currentChatId.value),
+    )
     return {
+      currentChatFriend,
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
@@ -104,9 +162,9 @@ export default defineComponent({
     box-sizing: border-box;
     padding-top: 32px;
     background-color: rgba(245, 245, 245, 1);
-    .message-flow {
+    .top-container {
       width: 100%;
-      height: 75%;
+      height: 70%;
       .friend-info {
         padding: 0 0 12px 18px;
         font-size: 22px;
@@ -114,10 +172,23 @@ export default defineComponent({
         border-bottom: 1px solid rgba(231, 231, 231, 1);
       }
     }
-    .message-editor {
+    .bottom-container {
       width: 100%;
-      height: 25%;
-      background-color: #ccc;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      border-top: 1px solid #eee;
+      background-color: #fff;
+      .tool-bar {
+        padding-left: 18px;
+        .tool-item {
+          width: 22px;
+          height: 22px;
+          margin-top: 8px;
+          margin-right: 10px;
+        }
+      }
     }
   }
 }

@@ -53,6 +53,5 @@ export default defineComponent({
   display: inline-block;
   border: none;
   outline: none;
-  border-top: 1px solid #eee;
 }
 </style>

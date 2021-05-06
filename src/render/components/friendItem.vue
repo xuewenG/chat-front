@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="friend-item-container"
-    :class="[{ activeChat: active }, { unactiveChat: !active }, 'friendItem']"
-    @click="changeChat"
-  >
+  <div class="friend-item-container" :class="{ active }" @click="changeChat">
     <div class="left-container">
       <img class="avatar" :src="friend.avatar" @click="showProfile" />
     </div>
@@ -20,14 +16,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { User } from '@render/entity/user'
+import { useStore } from '@render/store'
+import { defineComponent, PropType, ref, toRefs } from 'vue'
 export default defineComponent({
   name: 'FriendItem',
-  props: ['friend'],
-  setup() {
-    console.log('friedn item setup')
+  props: {
+    friend: {
+      type: Object as PropType<User>,
+      default: () => ({}),
+    },
+    active: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  setup(props) {
+    const { friend } = toRefs(props)
+    const store = useStore()
     const lastMessage = ref('你写了多少行代码？')
+    const changeChat = () => {
+      store.dispatch('SET_CURRENT_CHAT_ID', friend.value.id)
+    }
     return {
+      changeChat,
       lastMessage,
     }
   },
@@ -43,8 +55,8 @@ export default defineComponent({
   &:hover {
     background-color: rgba(219, 217, 217, 1);
   }
-  &.avtive {
-    background-color: rgba(195, 195, 197, 1);
+  &.active {
+    background-color: rgba(199, 198, 197, 1);
   }
   .left-container {
     margin-left: 12px;
