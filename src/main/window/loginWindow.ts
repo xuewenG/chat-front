@@ -4,7 +4,11 @@ import {
   useOpenMainWindow,
   useOpenRegisterWindow,
 } from '@main/event/loginWindow'
-import { useOpenScreenShareWindow } from '@main/event/mainWindow'
+import {
+  useAddFriendWindow,
+  useOpenEditProfileWindow,
+  useOpenScreenShareWindow,
+} from '@main/event/mainWindow'
 import { useInitWebSocket, useSendSocketMessage } from '@main/event/socket'
 import {
   useCloseWindow,
@@ -27,6 +31,8 @@ const createLoginWindow = async (): Promise<void> => {
   useSendSocketMessage()
   useCopy()
   useOpenScreenShareWindow()
+  useOpenEditProfileWindow()
+  useAddFriendWindow()
   win.setAlwaysOnTop(true)
 }
 

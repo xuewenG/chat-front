@@ -90,6 +90,7 @@ export default defineComponent({
       width: 38px;
       height: 38px;
       border-radius: 50%;
+      box-shadow: 0 0 10px rgba(205, 205, 205, 0.5);
     }
   }
   .right-container {

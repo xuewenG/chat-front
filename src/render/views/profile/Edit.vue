@@ -20,12 +20,23 @@
         @click="handleCloseWindow"
       />
     </div>
-    <div class="top-container">欢迎注册 Chat</div>
+    <div class="top-container">查看个人资料</div>
     <div class="bottom-container">
+      <div class="avatar-container">
+        <img class="avatar" :src="currentUser.avatar" alt="用户头像" />
+        <button class="upload">上传头像</button>
+      </div>
+      <m-input
+        class="input-comp"
+        id="account"
+        :place-holder="currentUser.account"
+        type="text"
+        disabled
+      />
       <m-input
         class="input-comp"
         id="nickname"
-        place-holder="昵称"
+        :place-holder="currentUser.nickname"
         type="text"
         v-model="nickname"
         :changeHandler="handleNicknameChange"
@@ -34,7 +45,7 @@
       <m-input
         class="input-comp"
         id="email"
-        place-holder="电子邮箱"
+        :place-holder="currentUser.email"
         type="email"
         v-model="email"
         :changeHandler="handleEmailChange"
@@ -72,20 +83,21 @@
           {{ getVerifyCodeCount || '获取验证码' }}
         </div>
       </div>
-      <button class="register" @click="handleRegister">立即注册</button>
+      <button class="register" @click="handleRegister">修改资料</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import {
   useCloseWindow,
   useHideWindow,
   useMoveWindow,
 } from '@render/event/window'
 import mInput from '@render/components/mInput.vue'
-import { useRegister } from './useRegister'
+import { useEditProfile } from './useEditProfile'
+import { useStore } from '@render/store'
 
 export default defineComponent({
   name: 'Home',
@@ -93,11 +105,14 @@ export default defineComponent({
     mInput,
   },
   setup() {
+    const store = useStore()
+    const currentUser = computed(() => store.state.currentUser)
     return {
+      currentUser,
+      ...useEditProfile(),
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
-      ...useRegister(),
     }
   },
 })
@@ -133,7 +148,7 @@ export default defineComponent({
   }
   .top-container {
     width: 100vw;
-    height: 100px;
+    height: 80px;
     box-sizing: border-box;
     padding-left: 30px;
     background-color: pink;
@@ -150,6 +165,34 @@ export default defineComponent({
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .avatar-container {
+      margin: 8px 0;
+      display: flex;
+      align-items: baseline;
+      .avatar {
+        width: 82px;
+        height: 82px;
+        display: inline-block;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(205, 205, 205, 0.5);
+      }
+      & > .upload {
+        width: 64px;
+        height: 22px;
+        margin-left: 8px;
+        padding: 0;
+        font-size: 12px;
+        color: white;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        background: rgba(5, 186, 251, 1);
+        transition: 0.2s;
+        &:hover {
+          background: rgba(31, 199, 253, 1);
+        }
+      }
+    }
     .input-comp {
       width: 300px;
       height: 38px;
@@ -167,7 +210,7 @@ export default defineComponent({
     .register {
       width: 200px;
       height: 36px;
-      margin-top: 6px;
+      margin-top: 12px;
       padding: 0;
       color: white;
       border: none;

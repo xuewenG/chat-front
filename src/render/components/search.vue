@@ -1,17 +1,28 @@
 <template>
   <div class="search-container">
     <input class="search-input" type="text" placeholder="搜索" />
-    <img class="add-friend" src="../assets/plus.svg" alt="添加好友" />
+    <img
+      class="add-friend"
+      src="../assets/plus.svg"
+      alt="添加好友"
+      @click="handleAddFriend"
+    />
   </div>
 </template>
 
 <script lang="ts">
+import { EVENT_TYPE } from '@common/event/eventType'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Search',
   components: {},
   setup() {
-    console.log('search - setup')
+    const handleAddFriend = () => {
+      ipcRenderer.send(EVENT_TYPE.OPEN_ADD_FRIEND_WINDOW)
+    }
+    return {
+      handleAddFriend,
+    }
   },
 })
 </script>
@@ -22,7 +33,6 @@ export default defineComponent({
   height: 26px;
   display: flex;
   justify-content: center;
-  margin: 26px 0;
   .search-input {
     height: 100%;
     flex: 1;

@@ -189,7 +189,6 @@ export default defineComponent({
       border: none;
       outline: none;
       border-radius: 4px;
-      background: none;
       background: rgba(5, 186, 251, 1);
       transition: 0.2s;
       &:hover {

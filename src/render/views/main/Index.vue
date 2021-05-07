@@ -21,6 +21,13 @@
       />
     </div>
     <div class="left-container">
+      <div class="user-info-container" @click="handleEditProfile">
+        <img class="avatar" :src="currentUser.avatar" alt="用户头像" />
+        <div class="right-container">
+          <div class="nickname">{{ currentUser.nickname }}</div>
+          <div class="account">{{ currentUser.account }}</div>
+        </div>
+      </div>
       <search />
       <friend-flow />
     </div>
@@ -101,9 +108,9 @@ export default defineComponent({
       },
       {
         id: 12,
-        nickname: '小红',
+        nickname: '干饭群',
         avatar:
-          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar3.jpeg',
+          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar15.jpeg',
         account: '1982583',
         password: '',
         email: 'xiaoli3@xuewen.me',
@@ -176,6 +183,7 @@ export default defineComponent({
       store.dispatch('SET_CURRENT_CHAT_ID', currentChatId)
     }
 
+    const currentUser = computed(() => store.state.currentUser)
     const friendList = computed(() => store.state.friendList)
     const currentChatId = computed(() => store.state.currentChatId)
     const currentChatFriend = computed(
@@ -186,9 +194,14 @@ export default defineComponent({
     const handleScreenShare = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)
     }
+    const handleEditProfile = () => {
+      ipcRenderer.send(EVENT_TYPE.OPEN_EDIT_PROFILE_WINDOW)
+    }
     return {
+      currentUser,
       currentChatFriend,
       handleScreenShare,
+      handleEditProfile,
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
@@ -228,8 +241,31 @@ export default defineComponent({
     width: 25%;
     height: 100%;
     background-color: rgba(233, 232, 231, 1);
+    .user-info-container {
+      margin: 18px 0 0 12px;
+      display: flex;
+      cursor: pointer;
+      .avatar {
+        width: 52px;
+        height: 52px;
+        display: inline-block;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(205, 205, 205, 0.5);
+      }
+      .right-container {
+        height: 52px;
+        margin-left: 12px;
+        line-height: 22px;
+        .nickname {
+          font-weight: 700;
+        }
+      }
+    }
+    .search-container {
+      margin: 18px 0;
+    }
   }
-  .right-container {
+  & > .right-container {
     width: 75%;
     height: 100%;
     box-sizing: border-box;
