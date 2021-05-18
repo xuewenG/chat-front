@@ -11,24 +11,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { SOCKET_MESSAGE_TYPE } from '@render/constant/socket/socketMessageType'
-import { EVENT_TYPE } from '@common/event/eventType'
+import { computed, defineComponent, ref } from 'vue'
+import { SOCKET_MESSAGE_TYPE } from '@common/constant/socket/socketMessageType'
+import * as socketUtil from '@render/util/socket'
+import { useStore } from '@render/store'
+import { Message } from '@common/entity/message'
 export default defineComponent({
   name: 'GroupMessageEdit',
   setup() {
-    const currentChat = ref(-1)
+    const store = useStore()
+    const currentContact = computed(() => store.state.currentContact)
     const textAreaContent = ref('')
     const sendMessage = () => {
-      const message = {
-        toId: currentChat.value,
+      const message: Partial<Message> = {
+        toId: (currentContact.value && currentContact.value.contactId) || -1,
         content: textAreaContent.value,
       }
-      const socketMessage = {
-        type: SOCKET_MESSAGE_TYPE.PRIVATE_MESSAGE,
-        data: JSON.stringify(message),
-      }
-      ipcRenderer.send(EVENT_TYPE.SEND_SOCKET_MESSAGE, socketMessage)
+      socketUtil.sendMessage(SOCKET_MESSAGE_TYPE.PRIVATE_MESSAGE, message)
       textAreaContent.value = ''
     }
     return {

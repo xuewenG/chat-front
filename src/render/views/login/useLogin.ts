@@ -21,17 +21,22 @@ const useLogin = (store: Store<State>) => {
       password: password.value,
       type: isEmail(credential.value) ? LOGIN_TYPE.EMAIL : LOGIN_TYPE.ACCOUNT,
     }).then(resp => {
-      if (resp.code === GLOBAL_RESPONSE_CODE.SUCCESS) {
-        store.dispatch('SET_CURRENT_USER', resp.data.user).then(() => {
-          store.dispatch('SET_LAST_LOGIN', {
-            credential: credential.value,
-            password: rememberPassword.value ? password.value : '',
-          })
+      const code = resp.code
+      if (code === GLOBAL_RESPONSE_CODE.SUCCESS) {
+        const token = resp.data.token
+        const actions: Promise<any>[] = []
+        actions.push(store.dispatch('SET_TOKEN', resp.data.token))
+        actions.push(store.dispatch('SET_CURRENT_USER', resp.data.user))
+        Promise.all(actions).then(() => {
           ipcRenderer.send(EVENT_TYPE.INIT_WEB_SOCKET, {
-            token: '123',
+            token,
           })
           ipcRenderer.send(EVENT_TYPE.OPEN_MAIN_WINDOW)
           ipcRenderer.send(EVENT_TYPE.CLOSE_WINDOW)
+        })
+        store.dispatch('SET_LAST_LOGIN', {
+          credential: credential.value,
+          password: rememberPassword.value ? password.value : '',
         })
       }
     })

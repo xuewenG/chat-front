@@ -1,9 +1,9 @@
 interface User {
   id: number
   account: string
+  nickname: string
   email: string
   password: string
-  nickname: string
   avatar: string
 }
 

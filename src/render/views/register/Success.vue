@@ -28,7 +28,7 @@
         <div class="copy">点击复制</div>
       </div>
       <div class="email-tips">
-        该账号绑定的邮箱为：{{ email }}，你可以使用账号或邮箱进行登录。
+        该账号绑定的邮箱为：{{ email }}，你可以使用账号或邮箱进行登录
       </div>
     </div>
   </div>

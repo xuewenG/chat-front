@@ -6,7 +6,6 @@ const createMainWindow = () => {
     width: 900,
     height: 600,
   })
-  win.setAlwaysOnTop(true)
 }
 
 export { createMainWindow }

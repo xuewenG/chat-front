@@ -1,29 +1,45 @@
 <template>
-  <div class="message-flow-container">
+  <div ref="message-flow-container" class="message-flow-container">
     <message-item
-      v-for="message in computedCurrentMessageList"
+      v-for="(message, index) in computedCurrentMessageList"
       :key="message.id"
       :message="message"
+      :ref="
+        el => {
+          if (index === computedCurrentMessageList.length - 1) {
+            lastMessageDom = el
+          }
+        }
+      "
     />
   </div>
 </template>
 
 <script lang="ts">
-import { Message } from '@render/entity/message'
-import { FriendMessage, useStore } from '@render/store'
-import { computed, defineComponent } from 'vue'
+import { Message } from '@common/entity/message'
+import { ContactMessage, useStore } from '@render/store'
+import {
+  computed,
+  defineComponent,
+  onBeforeUpdate,
+  Ref,
+  ref,
+  watchEffect,
+} from 'vue'
 import MessageItem from './messageItem.vue'
 export default defineComponent({
   name: 'MessageFlow',
   components: { MessageItem },
   setup() {
     const store = useStore()
-    const currentChatId = computed(() => store.state.currentChatId)
+    const currentContact = computed(() => store.state.currentContact)
     const currentMessageList = computed(() => {
       const friendMessage:
-        | FriendMessage
-        | undefined = store.state.friendMessageList.find(
-        friendMessage => friendMessage.friendId === currentChatId.value,
+        | ContactMessage
+        | undefined = store.state.contactMessageList.find(
+        relativeMessage =>
+          relativeMessage.contactId ===
+          (currentContact.value && currentContact.value.contactId),
       )
       if (!friendMessage) {
         return []
@@ -37,20 +53,39 @@ export default defineComponent({
           return newMessage
         }
         const preMessage = list[index - 1]
-        if (
-          message.time.getTime() - preMessage.time.getTime() <
-          5 * 60 * 1000
-        ) {
+        const time = new Date(message.time)
+        const preTime = new Date(preMessage.time)
+        if (time.getTime() - preTime.getTime() < 5 * 60 * 1000) {
           newMessage.time = undefined
         }
         return newMessage
       })
     })
+    const lastMessageDom: Ref<any> = ref(null)
+    watchEffect(
+      () => {
+        console.log('lastMessageDom.value', lastMessageDom.value)
+        if (lastMessageDom.value) {
+          lastMessageDom.value.$el.scrollIntoView()
+        }
+      },
+      {
+        flush: 'post',
+      },
+    )
+    onBeforeUpdate(() => {
+      lastMessageDom.value = null
+    })
     return {
+      lastMessageDom,
       computedCurrentMessageList,
     }
   },
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.message-flow-container {
+  overflow-y: scroll;
+}
+</style>

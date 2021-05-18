@@ -1,6 +1,6 @@
 import { EVENT_TYPE } from '@common/event/eventType'
 import { InjectedIpcRenderer } from '@common/event/injectedIpcRenderer'
-import { API_HOST } from '@common/network'
+import { API_HOST } from '@common/config'
 import { InjectedRequest } from '@common/network/injectedRequest'
 import { isDevelopment } from '@main/util/env'
 import { contextBridge, desktopCapturer, ipcRenderer } from 'electron'

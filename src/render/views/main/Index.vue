@@ -29,16 +29,16 @@
         </div>
       </div>
       <search />
-      <friend-flow />
+      <contact-flow />
     </div>
     <div class="right-container">
       <div class="top-container">
-        <div class="friend-info">
-          {{ currentChatFriend.nickname }}({{ currentChatFriend.account }})
+        <div v-if="currentContact" class="contact-info">
+          {{ currentContact.nickname }}({{ currentContact.account }})
         </div>
         <message-flow />
       </div>
-      <div class="bottom-container">
+      <div v-if="currentContact" class="bottom-container">
         <div class="tool-bar">
           <img
             class="tool-item voice"
@@ -49,6 +49,7 @@
             class="tool-item voice"
             src="../../assets/video.svg"
             alt="视频通话"
+            @click="handleVideo"
           />
           <img
             class="tool-item voice"
@@ -71,136 +72,59 @@ import {
 } from '@render/event/window'
 import MessageEditor from '@render/components/messageEditor.vue'
 import MessageFlow from '@render/components/messageFlow.vue'
-import FriendFlow from '@render/components/friendFlow.vue'
+import ContactFlow from '@render/components/contactFlow.vue'
 import Search from '@render/components/search.vue'
-import { computed, defineComponent } from 'vue'
-import { FriendMessage, useStore } from '@render/store'
+import { getAllContact } from '@render/api/contact'
+import { getAllMessage } from '@render/api/message'
+import { computed, defineComponent, Ref, ref } from 'vue'
+import { ContactMessage, useStore } from '@render/store'
 import { EVENT_TYPE } from '@common/event/eventType'
-import { User } from '@render/entity/user'
+import { Contact } from '@common/entity/contact'
 
 export default defineComponent({
   name: 'Home',
   components: {
     MessageEditor,
     MessageFlow,
-    FriendFlow,
+    ContactFlow,
     Search,
   },
   setup() {
-    const friendListFromServer: User[] = [
-      {
-        id: 10,
-        nickname: '小明',
-        avatar:
-          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar1.jpeg',
-        account: '1982581',
-        password: '',
-        email: 'xiaoli1@xuewen.me',
-      },
-      {
-        id: 11,
-        nickname: '李华',
-        avatar:
-          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar11.jpeg',
-        account: '1982582',
-        password: '',
-        email: 'xiaoli2@xuewen.me',
-      },
-      {
-        id: 12,
-        nickname: '干饭群',
-        avatar:
-          'https://blog-xuewen-me.oss-cn-shanghai.aliyuncs.com/xuewen/chat/avatar15.jpeg',
-        account: '1982583',
-        password: '',
-        email: 'xiaoli3@xuewen.me',
-      },
-    ]
-    const friendMessageListFromServer: FriendMessage[] = [
-      {
-        friendId: 10,
-        messageList: [
-          {
-            fromId: 10,
-            toId: 1,
-            content: '你出门了吗？',
-            time: new Date('2021-05-05 18:01:32'),
-          },
-          {
-            fromId: 1,
-            toId: 10,
-            content: '快到了',
-            time: new Date('2021-05-05 18:09:20'),
-          },
-        ],
-      },
-      {
-        friendId: 11,
-        messageList: [
-          {
-            fromId: 1,
-            toId: 11,
-            content: '在干嘛？',
-            time: new Date('2021-05-05 11:50:15'),
-          },
-          {
-            fromId: 11,
-            toId: 1,
-            content: '看电视',
-            time: new Date('2021-05-05 11:55:27'),
-          },
-          {
-            fromId: 1,
-            toId: 11,
-            content: '吃饭了吗？',
-            time: new Date('2021-05-05 11:55:58'),
-          },
-        ],
-      },
-      {
-        friendId: 12,
-        messageList: [
-          {
-            fromId: 1,
-            toId: 12,
-            content: '你啥时候回来？',
-            time: new Date('2021-05-05 09:20:05'),
-          },
-          {
-            fromId: 12,
-            toId: 1,
-            content: '下午吧',
-            time: new Date('2021-05-05 09:29:19'),
-          },
-        ],
-      },
-    ]
     const store = useStore()
-    store.dispatch('SET_FRIEND_LIST', friendListFromServer)
-    store.dispatch('SET_FRIEND_MESSAGE_LIST', friendMessageListFromServer)
-    if (friendListFromServer.length) {
-      const currentChatId = friendListFromServer[0].id
-      store.dispatch('SET_CURRENT_CHAT_ID', currentChatId)
+    let contactListFromServer: Ref<Contact[]> = ref([])
+    const initContactList = async () => {
+      const resp = await getAllContact()
+      const contactList = resp.data.contactList
+      contactListFromServer.value = contactList
+      store.dispatch('SET_CURRENT_CONTACT', contactList[0] || null)
+      store.dispatch('SET_CONTACT_LIST', contactListFromServer)
     }
+    initContactList()
+
+    const contactMessageList: Ref<ContactMessage[]> = ref([])
+    const initFriendMessageList = async () => {
+      const resp = await getAllMessage()
+      contactMessageList.value = resp.data.contactMessageList
+      store.dispatch('SET_CONTACT_MESSAGE_LIST', contactMessageList)
+    }
+    initFriendMessageList()
 
     const currentUser = computed(() => store.state.currentUser)
-    const friendList = computed(() => store.state.friendList)
-    const currentChatId = computed(() => store.state.currentChatId)
-    const currentChatFriend = computed(
-      () =>
-        friendList.value.find(current => current.id === currentChatId.value) ||
-        {},
-    )
+    const currentContact = computed(() => store.state.currentContact)
     const handleScreenShare = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)
+    }
+    const handleVideo = () => {
+      ipcRenderer.send(EVENT_TYPE.OPEN_VIDEO_WINDOW)
     }
     const handleEditProfile = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_EDIT_PROFILE_WINDOW)
     }
     return {
       currentUser,
-      currentChatFriend,
+      currentContact,
       handleScreenShare,
+      handleVideo,
       handleEditProfile,
       ...useMoveWindow(),
       ...useCloseWindow(),
@@ -274,7 +198,9 @@ export default defineComponent({
     .top-container {
       width: 100%;
       height: 70%;
-      .friend-info {
+      display: flex;
+      flex-direction: column;
+      .contact-info {
         padding: 0 0 12px 18px;
         font-size: 22px;
         font-weight: 700;

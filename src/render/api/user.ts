@@ -1,4 +1,4 @@
-import { User } from '@render/entity/user'
+import { User } from '@common/entity/user'
 
 interface RegisterReq {
   email: string
@@ -24,6 +24,7 @@ interface LoginResp {
   code: string
   data: {
     user: User
+    token: string
   }
 }
 

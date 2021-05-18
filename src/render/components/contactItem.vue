@@ -1,11 +1,11 @@
 <template>
-  <div class="friend-item-container" :class="{ active }" @click="changeChat">
+  <div class="contact-item-container" :class="{ active }" @click="changeChat">
     <div class="left-container">
-      <img class="avatar" :src="friend.avatar" @click="showProfile" />
+      <img class="avatar" :src="contact.avatar" @click="showProfile" />
     </div>
     <div class="right-container">
       <div class="top-container">
-        <div class="nickname">{{ friend.nickname }}</div>
+        <div class="nickname">{{ contact.nickname }}</div>
         <div class="time">{{ timeStr }}</div>
       </div>
       <div class="bottom-container">
@@ -16,15 +16,16 @@
 </template>
 
 <script lang="ts">
-import { User } from '@render/entity/user'
-import { FriendMessage, useStore } from '@render/store'
-import { computed, defineComponent, PropType, ref, toRefs } from 'vue'
+import { User } from '@common/entity/user'
+import { ContactMessage, useStore } from '@render/store'
+import { computed, defineComponent, PropType, toRefs } from 'vue'
 import moment from 'moment'
+import { Contact } from '@common/entity/contact'
 export default defineComponent({
-  name: 'FriendItem',
+  name: 'ContactItem',
   props: {
-    friend: {
-      type: Object as PropType<User>,
+    contact: {
+      type: Object as PropType<Contact>,
       default: () => ({}),
     },
     active: {
@@ -33,18 +34,19 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { friend } = toRefs(props)
+    const { contact } = toRefs(props)
     const store = useStore()
     const currentMessageList = computed(() => {
-      const friendMessage:
-        | FriendMessage
-        | undefined = store.state.friendMessageList.find(
-        friendMessage => friendMessage.friendId === friend.value.id,
+      const contactMessage:
+        | ContactMessage
+        | undefined = store.state.contactMessageList.find(
+        relativeMessage =>
+          relativeMessage.contactId === contact.value.contactId,
       )
-      if (!friendMessage) {
+      if (!contactMessage) {
         return []
       }
-      return friendMessage.messageList || []
+      return contactMessage.messageList || []
     })
     const lastMessage = computed(() => {
       const length = currentMessageList.value.length
@@ -60,7 +62,7 @@ export default defineComponent({
         : '',
     )
     const changeChat = () => {
-      store.dispatch('SET_CURRENT_CHAT_ID', friend.value.id)
+      store.dispatch('SET_CURRENT_CONTACT', contact)
     }
     return {
       messageContent,
@@ -72,7 +74,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.friend-item-container {
+.contact-item-container {
   width: 100%;
   height: 60px;
   display: flex;

@@ -54,7 +54,7 @@
       <m-input
         class="input-comp"
         id="password"
-        place-holder="密码"
+        place-holder="新密码"
         type="password"
         v-model="password"
         :changeHandler="handlePasswordChange"

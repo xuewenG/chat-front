@@ -5,9 +5,9 @@
         {{ timeStr }}
       </div>
     </div>
-    <div class="message-container" :class="{ 'friend-message': !myMessage }">
+    <div class="message-container" :class="{ 'contact-message': !myMessage }">
       <img
-        :src="myMessage ? currentUser.avatar : currentChatFriend.avatar"
+        :src="myMessage ? currentUser.avatar : currentContact.avatar"
         class="avatar"
       />
       <div class="content">{{ message.content }}</div>
@@ -19,7 +19,7 @@
 import { computed, defineComponent, PropType, toRefs } from 'vue'
 import moment from 'moment'
 import { useStore } from '@render/store'
-import { Message } from '@render/entity/message'
+import { Message } from '@common/entity/message'
 
 export default defineComponent({
   name: 'MessageItem',
@@ -49,15 +49,9 @@ export default defineComponent({
         ? moment(message.value.time).format('YYYY-MM-DD HH:mm:ss')
         : '',
     )
-    const friendList = computed(() => store.state.friendList)
-    const currentChatId = computed(() => store.state.currentChatId)
-    const currentChatFriend = computed(
-      () =>
-        friendList.value.find(current => current.id === currentChatId.value) ||
-        {},
-    )
+    const currentContact = computed(() => store.state.currentContact)
     return {
-      currentChatFriend,
+      currentContact,
       currentUser,
       timeStr,
       myMessage,
@@ -112,7 +106,7 @@ export default defineComponent({
         border-left-color: #fff;
       }
     }
-    &.friend-message {
+    &.contact-message {
       flex-direction: row;
       .content {
         margin-right: 0;

@@ -1,6 +1,7 @@
-import { Message } from '@render/entity/message'
-import { User } from '@render/entity/user'
-import { InjectionKey } from 'vue'
+import { Contact } from '@common/entity/contact'
+import { Message } from '@common/entity/message'
+import { User } from '@common/entity/user'
+import { InjectionKey, toRefs } from 'vue'
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 
@@ -9,24 +10,26 @@ export interface LastLogin {
   password: string
 }
 
-export interface FriendMessage {
-  friendId: number
+export interface ContactMessage {
+  contactId: number
+  contactType: number
   messageList: Message[]
 }
 
 export interface State {
-  currentChatId: number
+  currentContact: Contact | null
   currentUser: User
   lastLogin: LastLogin
-  friendList: User[]
-  friendMessageList: FriendMessage[]
+  contactList: Contact[]
+  contactMessageList: ContactMessage[]
+  token: string
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
 
 export default createStore<State>({
   state: {
-    currentChatId: -1,
+    currentContact: null,
     currentUser: {
       id: -1,
       account: '-1',
@@ -39,12 +42,13 @@ export default createStore<State>({
       credential: '',
       password: '',
     },
-    friendList: [],
-    friendMessageList: [],
+    contactList: [],
+    contactMessageList: [],
+    token: '',
   },
   mutations: {
-    SET_CURRENT_CHAT_ID(state, currentChatId: number) {
-      state.currentChatId = currentChatId
+    SET_CURRENT_CONTACT(state, currentContact: Contact) {
+      state.currentContact = currentContact
     },
     SET_CURRENT_USER(state, user: User) {
       state.currentUser = user
@@ -52,16 +56,33 @@ export default createStore<State>({
     SET_LAST_LOGIN(state, lastLogin: LastLogin) {
       state.lastLogin = lastLogin
     },
-    SET_FRIEND_LIST(state, friendList: User[]) {
-      state.friendList = friendList
+    SET_CONTACT_LIST(state, contactList: Contact[]) {
+      state.contactList = contactList
     },
-    SET_FRIEND_MESSAGE_LIST(state, friendMessageList: FriendMessage[]) {
-      state.friendMessageList = friendMessageList
+    SET_CONTACT_MESSAGE_LIST(state, contactMessageList: ContactMessage[]) {
+      state.contactMessageList = contactMessageList
+    },
+    SET_TOKEN(state, token: string) {
+      state.token = token
+    },
+    ADD_TEXT_MESSAGE(state, message: Message) {
+      const { contactMessageList } = toRefs(state)
+      const contactMessage = contactMessageList.value.find(
+        contactMessage =>
+          contactMessage.contactType === message.contactType &&
+          (contactMessage.contactId === message.fromId ||
+            contactMessage.contactId === message.toId),
+      )
+      if (contactMessage) {
+        contactMessage.messageList.push(message)
+      } else {
+        // contactMessage
+      }
     },
   },
   actions: {
-    SET_CURRENT_CHAT_ID(state, currentChatId: number) {
-      state.commit('SET_CURRENT_CHAT_ID', currentChatId)
+    SET_CURRENT_CONTACT(state, currentContact: string) {
+      state.commit('SET_CURRENT_CONTACT', currentContact)
     },
     SET_CURRENT_USER(state, user: User) {
       state.commit('SET_CURRENT_USER', user)
@@ -69,14 +90,24 @@ export default createStore<State>({
     SET_LAST_LOGIN(state, lastLogin: LastLogin) {
       state.commit('SET_LAST_LOGIN', lastLogin)
     },
-    SET_FRIEND_LIST(state, friendList: User[]) {
-      state.commit('SET_FRIEND_LIST', friendList)
+    SET_CONTACT_LIST(state, contactList: User[]) {
+      state.commit('SET_CONTACT_LIST', contactList)
     },
-    SET_FRIEND_MESSAGE_LIST(state, friendMessageList: FriendMessage[]) {
-      state.commit('SET_FRIEND_MESSAGE_LIST', friendMessageList)
+    SET_CONTACT_MESSAGE_LIST(state, contactMessageList: ContactMessage[]) {
+      state.commit('SET_CONTACT_MESSAGE_LIST', contactMessageList)
+    },
+    SET_TOKEN(state, token: string) {
+      state.commit('SET_TOKEN', token)
+    },
+    ADD_TEXT_MESSAGE(state, message: Message) {
+      state.commit('ADD_TEXT_MESSAGE', message)
     },
   },
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      fetchBeforeUse: false,
+    }),
+  ],
 })
 
 export function useStore() {

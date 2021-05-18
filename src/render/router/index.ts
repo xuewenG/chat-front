@@ -4,6 +4,7 @@ import Register from '@render/views/register/Index.vue'
 import RegisterSuccess from '@render/views/register/Success.vue'
 import Main from '@render/views/main/Index.vue'
 import Screen from '@render/views/screen/Index.vue'
+import Video from '@render/views/video/Index.vue'
 import EditProfile from '@render/views/profile/Edit.vue'
 import AddFriend from '@render/views/add/Index.vue'
 
@@ -32,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/screen',
     name: 'Screen',
     component: Screen,
+  },
+  {
+    path: '/video',
+    name: 'Video',
+    component: Video,
   },
   {
     path: '/edit',
