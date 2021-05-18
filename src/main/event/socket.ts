@@ -21,7 +21,7 @@ const checkSocket = (socket: WebSocket) => {
 
 const initWebsocket = (token: string) => {
   if (socket && checkSocket(socket)) {
-    socket.close()
+    closeSocket()
   }
   try {
     const url = new URL(`/chatSocket/${token}`, SOCKET_HOST)
@@ -48,6 +48,13 @@ const sendSocketMessage = (message: any) => {
   }
 }
 
+const closeSocket = () => {
+  if (socket) {
+    socket.close()
+    socket = null
+  }
+}
+
 const useInitWebSocket = () => {
   ipcMain.on(EVENT_TYPE.INIT_WEB_SOCKET, (event, data) => {
     const token = data.token
@@ -63,4 +70,4 @@ const useSendSocketMessage = () => {
   })
 }
 
-export { useInitWebSocket, useSendSocketMessage }
+export { useInitWebSocket, useSendSocketMessage, closeSocket }

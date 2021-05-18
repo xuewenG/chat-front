@@ -1,5 +1,6 @@
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { closeSocket } from './event/socket'
 import { installDevTool } from './util/devtool'
 import { isDarwin, isDevelopment, isTest, isWin32 } from './util/env'
 import { createLoginWindow } from './window/loginWindow'
@@ -28,6 +29,10 @@ app.on('ready', async () => {
     createProtocol('app')
   }
   createLoginWindow()
+})
+
+app.on('quit', () => {
+  closeSocket()
 })
 
 if (isDevelopment) {
