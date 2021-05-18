@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { defineComponent, ref, watchEffect } from 'vue'
 import {
   useCloseWindow,
   useHideWindow,
@@ -74,6 +74,8 @@ import { EVENT_TYPE } from '@common/event/eventType'
 import mInput from '@render/components/mInput.vue'
 import { useLogin } from './useLogin'
 import { useStore } from '@render/store'
+import { getAvatar } from '@render/api/user'
+import { GLOBAL_RESPONSE_CODE } from '@render/constant/code/globalResponseCode'
 
 export default defineComponent({
   name: 'Home',
@@ -82,16 +84,27 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const avatar = computed(() => store.state.currentUser.avatar)
+    const avatar = ref('')
     const handleOpenRegister = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_REGISTER_WINDOW)
     }
+    const loginRefs = useLogin(store)
+    watchEffect(async () => {
+      const credential = loginRefs.credential
+      const resp = await getAvatar(credential.value)
+      if (resp.code === GLOBAL_RESPONSE_CODE.SUCCESS) {
+        if (resp.data.avatar) {
+          avatar.value = resp.data.avatar
+        }
+      }
+    })
     return {
       avatar,
       ...useMoveWindow(),
       ...useCloseWindow(),
       ...useHideWindow(),
       ...useLogin(store),
+      ...loginRefs,
       handleOpenRegister,
     }
   },

@@ -28,6 +28,13 @@ interface LoginResp {
   }
 }
 
+interface GetAvatarResp {
+  code: string
+  data: {
+    avatar: string
+  }
+}
+
 const register = (data: RegisterReq): Promise<RegisterResp> => {
   return request.post('/user/register', data)
 }
@@ -36,4 +43,8 @@ const login = (data: LoginReq): Promise<LoginResp> => {
   return request.post('/user/login', data)
 }
 
-export { register, login }
+const getAvatar = (credential: string): Promise<GetAvatarResp> => {
+  return request.get('/user/avatar', { credential })
+}
+
+export { register, login, getAvatar }
