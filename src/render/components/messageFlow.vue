@@ -64,7 +64,6 @@ export default defineComponent({
     const lastMessageDom: Ref<any> = ref(null)
     watchEffect(
       () => {
-        console.log('lastMessageDom.value', lastMessageDom.value)
         if (lastMessageDom.value) {
           lastMessageDom.value.$el.scrollIntoView()
         }
