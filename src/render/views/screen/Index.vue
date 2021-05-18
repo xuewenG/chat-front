@@ -1,25 +1,6 @@
 <template>
-  <div
-    class="container"
-    @dragstart.prevent
-    @dragend.prevent
-    @mousedown="handleStartMoveWindow"
-    @mouseup="handleStopMoveWindow"
-  >
-    <div class="op-bar">
-      <img
-        class="op-item mini"
-        src="../../assets/mini.svg"
-        alt="最小化"
-        @click="handleHideWindow"
-      />
-      <img
-        class="op-item close"
-        src="../../assets/close.svg"
-        alt="关闭"
-        @click="handleCloseWindow"
-      />
-    </div>
+  <div class="container">
+    <op-bar />
     <video />
     <div class="tip">正在共享您的屏幕</div>
     <div class="tool-bar">
@@ -29,16 +10,15 @@
 </template>
 
 <script lang="ts">
-import {
-  useCloseWindow,
-  useHideWindow,
-  useMoveWindow,
-} from '@render/event/window'
 import { getScreenStream, setStreamToVideo } from '@render/util/capture'
+import OpBar from '@render/components/opBar.vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'Screen',
+  components: {
+    OpBar,
+  },
   setup() {
     getScreenStream().then(stream => {
       if (!stream) {
@@ -46,11 +26,7 @@ export default defineComponent({
       }
       setStreamToVideo('video', stream)
     })
-    return {
-      ...useMoveWindow(),
-      ...useCloseWindow(),
-      ...useHideWindow(),
-    }
+    return {}
   },
 })
 </script>
@@ -64,28 +40,6 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   background-color: #8a8a8a;
-  .op-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: flex;
-    z-index: 10;
-    .op-item {
-      width: 32px;
-      height: 32px;
-      transition: 0.2s;
-    }
-    .mini {
-      &:hover {
-        background: rgba(150, 150, 150, 0.25);
-      }
-    }
-    .close {
-      &:hover {
-        background: rgba(255, 0, 0, 0.8);
-      }
-    }
-  }
   video {
     width: 75%;
     height: 75%;

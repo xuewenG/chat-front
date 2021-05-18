@@ -1,25 +1,6 @@
 <template>
-  <div
-    class="container"
-    @dragstart.prevent
-    @dragend.prevent
-    @mousedown="handleStartMoveWindow"
-    @mouseup="handleStopMoveWindow"
-  >
-    <div class="op-bar">
-      <img
-        class="op-item mini"
-        src="../../assets/mini.svg"
-        alt="最小化"
-        @click="handleHideWindow"
-      />
-      <img
-        class="op-item close"
-        src="../../assets/close.svg"
-        alt="关闭"
-        @click="handleCloseWindow"
-      />
-    </div>
+  <div class="container">
+    <op-bar />
     <div class="top-container">添加好友</div>
     <div class="bottom-container">
       <m-input
@@ -54,17 +35,14 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import {
-  useCloseWindow,
-  useHideWindow,
-  useMoveWindow,
-} from '@render/event/window'
 import mInput from '@render/components/mInput.vue'
+import OpBar from '@render/components/opBar.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
     mInput,
+    OpBar,
   },
   setup() {
     const searchResultFromServer = reactive([
@@ -92,9 +70,6 @@ export default defineComponent({
     ])
     return {
       searchResultFromServer,
-      ...useMoveWindow(),
-      ...useCloseWindow(),
-      ...useHideWindow(),
     }
   },
 })
@@ -105,29 +80,6 @@ export default defineComponent({
   width: 100vw;
   height: 100vh;
   user-select: none;
-  .op-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: flex;
-    z-index: 10;
-    .op-item {
-      width: 32px;
-      height: 32px;
-      transition: 0.2s;
-    }
-    .mini {
-      display: none;
-      &:hover {
-        background: rgba(255, 255, 255, 0.25);
-      }
-    }
-    .close {
-      &:hover {
-        background: rgba(255, 0, 0, 0.8);
-      }
-    }
-  }
   .top-container {
     width: 100vw;
     height: 80px;

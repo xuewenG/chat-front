@@ -1,25 +1,6 @@
 <template>
-  <div
-    class="container"
-    @dragstart.prevent
-    @dragend.prevent
-    @mousedown="handleStartMoveWindow"
-    @mouseup="handleStopMoveWindow"
-  >
-    <div class="op-bar">
-      <img
-        class="op-item mini"
-        src="../../assets/mini.svg"
-        alt="最小化"
-        @click="handleHideWindow"
-      />
-      <img
-        class="op-item close"
-        src="../../assets/close.svg"
-        alt="关闭"
-        @click="handleCloseWindow"
-      />
-    </div>
+  <div class="container">
+    <op-bar />
     <div class="top-container">
       <img
         class="avatar"
@@ -65,13 +46,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, watchEffect } from 'vue'
-import {
-  useCloseWindow,
-  useHideWindow,
-  useMoveWindow,
-} from '@render/event/window'
 import { EVENT_TYPE } from '@common/event/eventType'
 import mInput from '@render/components/mInput.vue'
+import OpBar from '@render/components/opBar.vue'
 import { useLogin } from './useLogin'
 import { useStore } from '@render/store'
 import { getAvatar } from '@render/api/user'
@@ -81,6 +58,7 @@ export default defineComponent({
   name: 'Home',
   components: {
     mInput,
+    OpBar,
   },
   setup() {
     const store = useStore()
@@ -100,9 +78,6 @@ export default defineComponent({
     })
     return {
       avatar,
-      ...useMoveWindow(),
-      ...useCloseWindow(),
-      ...useHideWindow(),
       ...useLogin(store),
       ...loginRefs,
       handleOpenRegister,
@@ -115,28 +90,6 @@ export default defineComponent({
 .container {
   width: 100vw;
   height: 100vh;
-  .op-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: flex;
-    z-index: 10;
-    .op-item {
-      width: 32px;
-      height: 32px;
-      transition: 0.2s;
-    }
-    .mini {
-      &:hover {
-        background: rgba(255, 255, 255, 0.25);
-      }
-    }
-    .close {
-      &:hover {
-        background: rgba(255, 0, 0, 0.8);
-      }
-    }
-  }
   .top-container {
     width: 100vw;
     height: 40vh;

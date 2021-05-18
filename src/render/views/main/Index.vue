@@ -1,25 +1,6 @@
 <template>
-  <div
-    class="container"
-    @dragstart.prevent
-    @dragend.prevent
-    @mousedown="handleStartMoveWindow"
-    @mouseup="handleStopMoveWindow"
-  >
-    <div class="op-bar">
-      <img
-        class="op-item mini"
-        src="../../assets/mini-gray.svg"
-        alt="最小化"
-        @click="handleHideWindow"
-      />
-      <img
-        class="op-item close"
-        src="../../assets/close-gray.svg"
-        alt="关闭"
-        @click="handleCloseWindow"
-      />
-    </div>
+  <div class="container">
+    <op-bar />
     <div class="left-container">
       <div class="user-info-container" @click="handleEditProfile">
         <img class="avatar" :src="currentUser.avatar" alt="用户头像" />
@@ -65,14 +46,10 @@
 </template>
 
 <script lang="ts">
-import {
-  useCloseWindow,
-  useHideWindow,
-  useMoveWindow,
-} from '@render/event/window'
+import ContactFlow from '@render/components/contactFlow.vue'
 import MessageEditor from '@render/components/messageEditor.vue'
 import MessageFlow from '@render/components/messageFlow.vue'
-import ContactFlow from '@render/components/contactFlow.vue'
+import OpBar from '@render/components/opBar.vue'
 import Search from '@render/components/search.vue'
 import { getAllContact } from '@render/api/contact'
 import { getAllMessage } from '@render/api/message'
@@ -84,9 +61,10 @@ import { Contact } from '@common/entity/contact'
 export default defineComponent({
   name: 'Home',
   components: {
+    ContactFlow,
     MessageEditor,
     MessageFlow,
-    ContactFlow,
+    OpBar,
     Search,
   },
   setup() {
@@ -126,9 +104,6 @@ export default defineComponent({
       handleScreenShare,
       handleVideo,
       handleEditProfile,
-      ...useMoveWindow(),
-      ...useCloseWindow(),
-      ...useHideWindow(),
     }
   },
 })
@@ -139,28 +114,6 @@ export default defineComponent({
   width: 100vw;
   height: 100vh;
   display: flex;
-  .op-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: flex;
-    z-index: 10;
-    .op-item {
-      width: 32px;
-      height: 32px;
-      transition: 0.2s;
-    }
-    .mini {
-      &:hover {
-        background: rgba(150, 150, 150, 0.25);
-      }
-    }
-    .close {
-      &:hover {
-        background: rgba(255, 0, 0, 0.8);
-      }
-    }
-  }
   .left-container {
     width: 25%;
     height: 100%;

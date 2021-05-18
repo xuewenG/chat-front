@@ -1,25 +1,6 @@
 <template>
-  <div
-    class="container"
-    @dragstart.prevent
-    @dragend.prevent
-    @mousedown="handleStartMoveWindow"
-    @mouseup="handleStopMoveWindow"
-  >
-    <div class="op-bar">
-      <img
-        class="op-item mini"
-        src="../../assets/mini.svg"
-        alt="最小化"
-        @click="handleHideWindow"
-      />
-      <img
-        class="op-item close"
-        src="../../assets/close.svg"
-        alt="关闭"
-        @click="handleCloseWindow"
-      />
-    </div>
+  <div class="container">
+    <op-bar />
     <div class="top-container">注册完成</div>
     <div class="bottom-container">
       <div class="account-tips">申请成功，获得账号：</div>
@@ -37,15 +18,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import {
-  useCloseWindow,
-  useHideWindow,
-  useMoveWindow,
-} from '@render/event/window'
 import { EVENT_TYPE } from '@common/event/eventType'
+import OpBar from '@render/components/opBar.vue'
 
 export default defineComponent({
   name: 'Home',
+  components: {
+    OpBar,
+  },
   setup() {
     const route = useRoute()
     const account = ref('---')
@@ -66,9 +46,6 @@ export default defineComponent({
     return {
       account,
       email,
-      ...useMoveWindow(),
-      ...useCloseWindow(),
-      ...useHideWindow(),
       handleCopy,
     }
   },
@@ -80,29 +57,6 @@ export default defineComponent({
   width: 100vw;
   height: 100vh;
   user-select: none;
-  .op-bar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    display: flex;
-    z-index: 10;
-    .op-item {
-      width: 32px;
-      height: 32px;
-      transition: 0.2s;
-    }
-    .mini {
-      display: none;
-      &:hover {
-        background: rgba(255, 255, 255, 0.25);
-      }
-    }
-    .close {
-      &:hover {
-        background: rgba(255, 0, 0, 0.8);
-      }
-    }
-  }
   .top-container {
     width: 100vw;
     height: 100px;
