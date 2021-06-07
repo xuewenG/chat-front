@@ -53,10 +53,13 @@ import OpBar from '@render/components/opBar.vue'
 import Search from '@render/components/search.vue'
 import { getAllContact } from '@render/api/contact'
 import { getAllMessage } from '@render/api/message'
-import { computed, defineComponent, Ref, ref } from 'vue'
+import { computed, defineComponent, Ref, ref, watchEffect } from 'vue'
 import { ContactMessage, useStore } from '@render/store'
 import { EVENT_TYPE } from '@common/event/eventType'
 import { Contact } from '@common/entity/contact'
+import { Message } from '@common/entity/message'
+import { SOCKET_MESSAGE_TYPE } from '@common/constant/socket/socketMessageType'
+import * as socketUtil from '@render/util/socket'
 
 export default defineComponent({
   name: 'Home',
@@ -89,8 +92,14 @@ export default defineComponent({
 
     const currentUser = computed(() => store.state.currentUser)
     const currentContact = computed(() => store.state.currentContact)
+    watchEffect(() => {
+      document.title = currentUser.value.nickname
+    })
     const handleScreenShare = () => {
-      ipcRenderer.send(EVENT_TYPE.OPEN_SCREEN_SHARE_WINDOW)
+      const message: Partial<Message> = {
+        toId: (currentContact.value && currentContact.value.contactId) || -1,
+      }
+      socketUtil.sendMessage(SOCKET_MESSAGE_TYPE.SCREEN_SHARE, message)
     }
     const handleVideo = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_VIDEO_WINDOW)

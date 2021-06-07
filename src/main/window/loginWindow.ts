@@ -22,6 +22,7 @@ const createLoginWindow = async (): Promise<void> => {
   const win = createWindow(WINDOW_NAME.LOGIN_WINDOW, '/', {
     width: 430,
     height: 330,
+    title: '用户登录',
   })
   useCloseWindow()
   useHideWindow()
@@ -35,7 +36,6 @@ const createLoginWindow = async (): Promise<void> => {
   useOpenEditProfileWindow()
   useAddFriendWindow()
   useOpenVideoWindow()
-  win.setAlwaysOnTop(true)
 }
 
 export { createLoginWindow }

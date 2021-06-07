@@ -36,6 +36,12 @@ const initWebsocket = (token: string) => {
           mainWindow.webContents.send(EVENT_TYPE.RECEIVE_TEXT_MESSAGE, message)
         }
       }
+      if (socketMessage.type === SOCKET_MESSAGE_TYPE.SCREEN_SHARE) {
+        const mainWindow = getWindowByName(WINDOW_NAME.MAIN_WINDOW)
+        if (mainWindow) {
+          mainWindow.webContents.send(EVENT_TYPE.RECEIVE_SCREEN_SHARE)
+        }
+      }
     })
   } catch (error) {
     console.error(error)
