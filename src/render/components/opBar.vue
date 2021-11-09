@@ -31,7 +31,7 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'OpBar',
-  setup() {
+  setup () {
     return {
       ...useMoveWindow(),
       ...useCloseWindow(),

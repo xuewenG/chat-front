@@ -20,7 +20,7 @@ import ContactItem from './contactItem.vue'
 export default defineComponent({
   name: 'ContactFlow',
   components: { ContactItem },
-  setup() {
+  setup () {
     const store = useStore()
     const contactList = computed(() => store.state.contactList)
     const currentContact = computed(() => store.state.currentContact)

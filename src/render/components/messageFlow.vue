@@ -30,17 +30,17 @@ import MessageItem from './messageItem.vue'
 export default defineComponent({
   name: 'MessageFlow',
   components: { MessageItem },
-  setup() {
+  setup () {
     const store = useStore()
     const currentContact = computed(() => store.state.currentContact)
     const currentMessageList = computed(() => {
       const friendMessage:
         | ContactMessage
         | undefined = store.state.contactMessageList.find(
-        relativeMessage =>
-          relativeMessage.contactId ===
+          relativeMessage =>
+            relativeMessage.contactId ===
           (currentContact.value && currentContact.value.contactId),
-      )
+        )
       if (!friendMessage) {
         return []
       }

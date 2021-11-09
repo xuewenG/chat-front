@@ -9,7 +9,7 @@ import { defineComponent } from 'vue'
 import { useStore } from './store'
 
 export default defineComponent({
-  setup() {
+  setup () {
     const store = useStore()
     ipcRenderer.on(
       EVENT_TYPE.RECEIVE_TEXT_MESSAGE,

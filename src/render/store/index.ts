@@ -25,7 +25,7 @@ export interface State {
   token: string
 }
 
-export const key: InjectionKey<Store<State>> = Symbol()
+export const key: InjectionKey<Store<State>> = Symbol('storeKey')
 
 export default createStore<State>({
   state: {
@@ -47,25 +47,25 @@ export default createStore<State>({
     token: '',
   },
   mutations: {
-    SET_CURRENT_CONTACT(state, currentContact: Contact) {
+    SET_CURRENT_CONTACT (state, currentContact: Contact) {
       state.currentContact = currentContact
     },
-    SET_CURRENT_USER(state, user: User) {
+    SET_CURRENT_USER (state, user: User) {
       state.currentUser = user
     },
-    SET_LAST_LOGIN(state, lastLogin: LastLogin) {
+    SET_LAST_LOGIN (state, lastLogin: LastLogin) {
       state.lastLogin = lastLogin
     },
-    SET_CONTACT_LIST(state, contactList: Contact[]) {
+    SET_CONTACT_LIST (state, contactList: Contact[]) {
       state.contactList = contactList
     },
-    SET_CONTACT_MESSAGE_LIST(state, contactMessageList: ContactMessage[]) {
+    SET_CONTACT_MESSAGE_LIST (state, contactMessageList: ContactMessage[]) {
       state.contactMessageList = contactMessageList
     },
-    SET_TOKEN(state, token: string) {
+    SET_TOKEN (state, token: string) {
       state.token = token
     },
-    ADD_TEXT_MESSAGE(state, message: Message) {
+    ADD_TEXT_MESSAGE (state, message: Message) {
       const { contactMessageList } = toRefs(state)
       const contactMessage = contactMessageList.value.find(
         contactMessage =>
@@ -81,25 +81,25 @@ export default createStore<State>({
     },
   },
   actions: {
-    SET_CURRENT_CONTACT(state, currentContact: string) {
+    SET_CURRENT_CONTACT (state, currentContact: string) {
       state.commit('SET_CURRENT_CONTACT', currentContact)
     },
-    SET_CURRENT_USER(state, user: User) {
+    SET_CURRENT_USER (state, user: User) {
       state.commit('SET_CURRENT_USER', user)
     },
-    SET_LAST_LOGIN(state, lastLogin: LastLogin) {
+    SET_LAST_LOGIN (state, lastLogin: LastLogin) {
       state.commit('SET_LAST_LOGIN', lastLogin)
     },
-    SET_CONTACT_LIST(state, contactList: User[]) {
+    SET_CONTACT_LIST (state, contactList: User[]) {
       state.commit('SET_CONTACT_LIST', contactList)
     },
-    SET_CONTACT_MESSAGE_LIST(state, contactMessageList: ContactMessage[]) {
+    SET_CONTACT_MESSAGE_LIST (state, contactMessageList: ContactMessage[]) {
       state.commit('SET_CONTACT_MESSAGE_LIST', contactMessageList)
     },
-    SET_TOKEN(state, token: string) {
+    SET_TOKEN (state, token: string) {
       state.commit('SET_TOKEN', token)
     },
-    ADD_TEXT_MESSAGE(state, message: Message) {
+    ADD_TEXT_MESSAGE (state, message: Message) {
       state.commit('ADD_TEXT_MESSAGE', message)
     },
   },
@@ -110,6 +110,6 @@ export default createStore<State>({
   ],
 })
 
-export function useStore() {
+export function useStore () {
   return baseUseStore(key)
 }

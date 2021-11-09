@@ -19,7 +19,7 @@ export default defineComponent({
   components: {
     OpBar,
   },
-  setup() {
+  setup () {
     getScreenStream().then(stream => {
       if (!stream) {
         return

@@ -44,7 +44,7 @@ export default defineComponent({
     mInput,
     OpBar,
   },
-  setup() {
+  setup () {
     const searchResultFromServer = reactive([
       {
         avatar:

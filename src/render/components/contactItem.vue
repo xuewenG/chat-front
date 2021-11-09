@@ -33,16 +33,16 @@ export default defineComponent({
       default: () => false,
     },
   },
-  setup(props) {
+  setup (props) {
     const { contact } = toRefs(props)
     const store = useStore()
     const currentMessageList = computed(() => {
       const contactMessage:
         | ContactMessage
         | undefined = store.state.contactMessageList.find(
-        relativeMessage =>
-          relativeMessage.contactId === contact.value.contactId,
-      )
+          relativeMessage =>
+            relativeMessage.contactId === contact.value.contactId,
+        )
       if (!contactMessage) {
         return []
       }

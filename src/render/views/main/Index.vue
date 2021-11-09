@@ -67,9 +67,9 @@ export default defineComponent({
     OpBar,
     Search,
   },
-  setup() {
+  setup () {
     const store = useStore()
-    let contactListFromServer: Ref<Contact[]> = ref([])
+    const contactListFromServer: Ref<Contact[]> = ref([])
     const initContactList = async () => {
       const resp = await getAllContact()
       const contactList = resp.data.contactList

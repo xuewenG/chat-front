@@ -82,7 +82,7 @@ export default defineComponent({
     mInput,
     OpBar,
   },
-  setup() {
+  setup () {
     const store = useStore()
     const currentUser = computed(() => store.state.currentUser)
     return {

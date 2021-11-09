@@ -70,7 +70,7 @@ export default defineComponent({
     mInput,
     OpBar,
   },
-  setup() {
+  setup () {
     return {
       ...useRegister(),
     }

@@ -37,7 +37,7 @@ export default defineComponent({
       },
     },
   },
-  setup(props) {
+  setup (props) {
     const store = useStore()
     const { message } = toRefs(props)
     const currentUser = computed(() => store.state.currentUser)

@@ -5,10 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:vue/vue3-essential',
-    'eslint:recommended',
+    '@vue/standard',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint',
   ],
   globals: {
     ipcRenderer: true,
@@ -19,6 +17,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    'comma-dangle': ['error', 'always-multiline'],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },

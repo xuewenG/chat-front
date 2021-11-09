@@ -18,7 +18,7 @@ import { useStore } from '@render/store'
 import { Message } from '@common/entity/message'
 export default defineComponent({
   name: 'GroupMessageEdit',
-  setup() {
+  setup () {
     const store = useStore()
     const currentContact = computed(() => store.state.currentContact)
     const textAreaContent = ref('')

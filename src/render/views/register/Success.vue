@@ -26,7 +26,7 @@ export default defineComponent({
   components: {
     OpBar,
   },
-  setup() {
+  setup () {
     const route = useRoute()
     const account = ref('---')
     const accountParam = route.params.account

@@ -34,7 +34,7 @@ export default defineComponent({
       default: () => {},
     },
   },
-  setup(props, context) {
+  setup (props, context) {
     const propsRefs = toRefs(props)
     const { inputHandler, changeHandler } = propsRefs
     const handleInput = (event: InputEvent) => {

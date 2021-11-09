@@ -60,7 +60,7 @@ export default defineComponent({
     mInput,
     OpBar,
   },
-  setup() {
+  setup () {
     const store = useStore()
     const avatar = ref('')
     const handleOpenRegister = () => {

@@ -16,7 +16,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'Search',
   components: {},
-  setup() {
+  setup () {
     const handleAddFriend = () => {
       ipcRenderer.send(EVENT_TYPE.OPEN_ADD_FRIEND_WINDOW)
     }
